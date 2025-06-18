@@ -27,14 +27,15 @@
 
 ## Proposed Mobile-Friendly Architecture
 
-### Architecture Decision: Hybrid Approach
-**Recommendation**: Keep Python backend + Add React Native frontend with Node.js API layer
+### Architecture Decision: PWA-First Approach
+**Recommendation**: Keep Python backend + Add PWA frontend with Node.js API layer
 
 **Rationale**:
 1. **Preserve Investment**: Existing Python scrapers are robust and well-tested
 2. **Leverage Strengths**: Python excels at web scraping and data processing
-3. **Mobile Optimization**: React Native provides native mobile experience
-4. **Deployment Flexibility**: Hybrid approach supports multiple deployment options
+3. **Mobile Optimization**: PWA provides excellent mobile experience without app store complexity
+4. **Deployment Simplicity**: Single codebase for all platforms
+5. **Instant Access**: No app store downloads required
 
 ### System Architecture Overview
 
@@ -43,9 +44,9 @@
 │                    MOBILE-FRIENDLY AI NEWS SYSTEM               │
 ├─────────────────────────────────────────────────────────────────┤
 │  📱 FRONTEND LAYER                                              │
-│  ├── React Native App (iOS/Android)                            │
-│  ├── PWA Web App (Responsive)                                  │
-│  └── Push Notifications                                        │
+│  ├── PWA Web App (Responsive, Mobile-First)                   │
+│  ├── Add to Home Screen capability                             │
+│  └── Push Notifications (Web Push API)                        │
 ├─────────────────────────────────────────────────────────────────┤
 │  🔗 API LAYER                                                   │
 │  ├── Node.js/Express REST API                                  │
@@ -99,38 +100,33 @@ POST /api/notifications/subscribe // Push notification subscription
 - Maintain existing cron automation
 
 ### Phase 2: PWA Development (Week 2-3)
-**Goal**: Create responsive web app that works on mobile
+**Goal**: Create comprehensive PWA that provides full mobile experience
 
 #### 2.1 React PWA Features
-- **Responsive Design**: Mobile-first approach
-- **Offline Support**: Service worker for cached reports
-- **Push Notifications**: Web push API integration
-- **App-like Experience**: Add to home screen capability
+- **Responsive Design**: Mobile-first approach optimized for all screen sizes
+- **Offline Support**: Service worker for cached reports and offline reading
+- **Push Notifications**: Web push API integration for daily alerts
+- **App-like Experience**: Add to home screen with app icon and splash screen
+- **Fast Loading**: Optimized bundle size and lazy loading
 
 #### 2.2 Core Features
 - View latest reports with mobile-optimized layout
 - Pull-to-refresh for manual updates
 - Dark/light mode toggle
 - Source filtering and preferences
-- Notification settings
+- Notification settings and scheduling
+- Article bookmarking and reading progress
+- Share functionality for articles
+- Search through report history
 
-### Phase 3: React Native App (Week 3-4)
-**Goal**: Native mobile app for iOS/Android
+#### 2.3 Advanced PWA Features
+- **Background Sync**: Queue actions when offline
+- **Install Prompts**: Smart app installation suggestions
+- **Performance Optimization**: Code splitting and caching strategies
+- **Accessibility**: Full WCAG compliance
+- **Analytics**: User engagement tracking
 
-#### 3.1 Core App Features
-- Native navigation and performance
-- Push notifications
-- Background refresh
-- Biometric authentication (optional)
-- Share functionality
-
-#### 3.2 Advanced Features
-- Offline reading
-- Bookmarking articles
-- Reading progress tracking
-- Custom notification schedules
-
-### Phase 4: Deployment & Automation (Week 4-5)
+### Phase 3: Deployment & Automation (Week 3-4)
 **Goal**: Production deployment with automated scheduling
 
 #### 4.1 Deployment Options (Ranked by Simplicity)
@@ -252,30 +248,36 @@ app.listen(3000, () => {
 });
 ```
 
-### React Native App Structure
+### PWA App Structure
 
 #### Core Components
 ```javascript
 // App.js
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ThemeProvider } from './contexts/ThemeContext';
+import { NotificationProvider } from './contexts/NotificationContext';
 
+import Layout from './components/Layout';
 import HomeScreen from './screens/HomeScreen';
 import ReportsScreen from './screens/ReportsScreen';
 import SettingsScreen from './screens/SettingsScreen';
 
-const Tab = createBottomTabNavigator();
-
 export default function App() {
   return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Reports" component={ReportsScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <ThemeProvider>
+      <NotificationProvider>
+        <Router>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<HomeScreen />} />
+              <Route path="/reports" element={<ReportsScreen />} />
+              <Route path="/settings" element={<SettingsScreen />} />
+            </Routes>
+          </Layout>
+        </Router>
+      </NotificationProvider>
+    </ThemeProvider>
   );
 }
 ```
@@ -284,7 +286,7 @@ export default function App() {
 ```javascript
 // HomeScreen.js - Main dashboard
 import React, { useState, useEffect } from 'react';
-import { ScrollView, RefreshControl, Text, View } from 'react-native';
+import { PullToRefresh } from './components/PullToRefresh';
 
 export default function HomeScreen() {
   const [reports, setReports] = useState([]);
@@ -298,13 +300,11 @@ export default function HomeScreen() {
   };
 
   return (
-    <ScrollView
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-    >
-      {/* Report components */}
-    </ScrollView>
+    <PullToRefresh onRefresh={onRefresh} refreshing={refreshing}>
+      <div className="home-screen">
+        {/* Report components */}
+      </div>
+    </PullToRefresh>
   );
 }
 ```
@@ -436,10 +436,9 @@ jobs:
 
 ### Development Costs (Time Investment)
 - **Phase 1 (API)**: 20-30 hours
-- **Phase 2 (PWA)**: 30-40 hours  
-- **Phase 3 (React Native)**: 40-50 hours
-- **Phase 4 (Deployment)**: 10-15 hours
-- **Total**: 100-135 hours (~3-4 weeks full-time)
+- **Phase 2 (PWA)**: 40-60 hours (comprehensive mobile experience)
+- **Phase 3 (Deployment)**: 10-15 hours
+- **Total**: 70-105 hours (~2-3 weeks full-time)
 
 ### Operational Costs (Monthly)
 - **Railway Deployment**: $5-20/month
@@ -489,25 +488,20 @@ jobs:
 - **Days 3-4**: Database integration and Python scraper modifications
 - **Days 5-7**: API testing and documentation
 
-### Week 2: PWA Development
-- **Days 1-3**: React PWA setup and responsive design
-- **Days 4-5**: Service worker and offline functionality
-- **Days 6-7**: Push notifications and PWA features
+### Week 2: PWA Development - Core Features
+- **Days 1-2**: React PWA setup and responsive design
+- **Days 3-4**: Core screens and navigation
+- **Days 5-7**: API integration and data management
 
-### Week 3: React Native App
-- **Days 1-3**: React Native setup and navigation
-- **Days 4-5**: Core features and API integration
-- **Days 6-7**: Push notifications and native features
+### Week 3: PWA Development - Advanced Features
+- **Days 1-2**: Service worker and offline functionality
+- **Days 3-4**: Push notifications and PWA features
+- **Days 5-7**: Performance optimization and testing
 
-### Week 4: Deployment & Testing
+### Week 4: Deployment & Launch
 - **Days 1-2**: Railway deployment setup
 - **Days 3-4**: Automated scheduling configuration
-- **Days 5-7**: End-to-end testing and bug fixes
-
-### Week 5: Launch & Optimization
-- **Days 1-2**: Production deployment
-- **Days 3-4**: Monitoring and performance optimization
-- **Days 5-7**: User feedback and iterations
+- **Days 5-7**: End-to-end testing, bug fixes, and launch
 
 ## Next Steps
 
