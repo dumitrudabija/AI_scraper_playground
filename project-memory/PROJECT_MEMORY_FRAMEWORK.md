@@ -353,13 +353,19 @@ ANTHROPIC_API_KEY=sk-ant-...  # Required for AI summarization
 - ✅ Header buttons functional (refresh and theme toggle with console logging)
 - ✅ No compilation errors, clean PWA foundation ready for API integration
 
-#### 🎯 Pending Tasks (Ready for Execution):
+**Task 4: Connect PWA to API (COMPLETED 2025-06-18 12:42 PM)**
+- ✅ **CORS Configuration Fixed** - Added localhost:3001 to API server allowed origins
+- ✅ **API Server Running** - Successfully running on port 3002 with all endpoints
+- ✅ **HomeScreen API Integration** - Real data: 26 articles, 6 sources, actual timestamps
+- ✅ **ReportsScreen API Integration** - All 26 articles with filtering, real TechCrunch/HN/Reddit data
+- ✅ **Data Structure Mapping** - Fixed reportData.data.articles access pattern
+- ✅ **Real Article Features** - Source color coding, external links, timestamps, descriptions
+- ✅ **Error Handling** - Graceful fallback to mock data if API fails
+- ✅ **API Endpoints Tested** - GET /api/reports/latest returning complete dataset
+- ✅ **Filtering Working** - Business filter shows 12 articles, Development filter functional
+- ✅ **Performance Validated** - Fast API responses (200/304 status codes)
 
-**Task 4: Connect PWA to API (1 hour)**
-- Replace mock data with real API calls
-- Integrate ApiContext in components
-- Test data fetching from /api/reports/latest
-- Display actual news data instead of placeholders
+#### 🎯 Pending Tasks (Ready for Execution):
 
 **Task 5: Add Missing PWA Files (30 minutes)**
 - Service worker implementation (serviceWorkerRegistration.js)
@@ -539,6 +545,6 @@ ANTHROPIC_API_KEY=sk-ant-...  # Required for AI summarization
 
 *This Project Memory Framework ensures complete visibility into the AI News Scraper project state, implementation, and evolution. It serves as the single source of truth for project understanding and decision-making.*
 
-**Last Updated**: 2025-06-18 12:29:07 AM (America/Toronto)
+**Last Updated**: 2025-06-18 12:43:22 AM (America/Toronto)
 **Framework Version**: 1.0
 **Next Review**: 2025-07-18
