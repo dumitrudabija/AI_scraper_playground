@@ -126,6 +126,7 @@ dist
 # Gatsby files
 .cache/
 public
+!pwa/public/
 
 # Storybook build outputs
 .out
