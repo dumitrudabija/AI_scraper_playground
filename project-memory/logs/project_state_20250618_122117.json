@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-18T12:21:17.477469",
+  "timestamp": "2025-06-18T12:09:32.847183",
   "project_structure": {
     "core_files": [
       {
@@ -15,7 +15,7 @@
       },
       {
         "path": "PROJECT_MEMORY_FRAMEWORK.md",
-        "size_kb": 19.708984375
+        "size_kb": 17.4541015625
       },
       {
         "path": "PROJECT_MEMORY_SUMMARY.md",
@@ -42,11 +42,11 @@
       {
         "name": "logs",
         "path": "logs",
-        "file_count": 4
+        "file_count": 3
       }
     ],
-    "total_files": 17,
-    "total_size_mb": 0.16864490509033203
+    "total_files": 15,
+    "total_size_mb": 0.1443767547607422
   },
   "dependencies": {
     "requirements_file_exists": false,
@@ -63,8 +63,8 @@
       },
       {
         "path": "PROJECT_MEMORY_FRAMEWORK.md",
-        "modified": "2025-06-18T12:19:28.395237",
-        "size_kb": 19.708984375
+        "modified": "2025-06-18T12:09:27.052499",
+        "size_kb": 17.4541015625
       },
       {
         "path": "PROJECT_MEMORY_SUMMARY.md",
@@ -73,8 +73,8 @@
       },
       {
         "path": "project_state.json",
-        "modified": "2025-06-18T12:09:32.858943",
-        "size_kb": 4.130859375
+        "modified": "2025-06-18T12:09:27.051583",
+        "size_kb": 4.1328125
       },
       {
         "path": "project_state_tracker.py",
@@ -87,14 +87,9 @@
         "size_kb": 6.7177734375
       },
       {
-        "path": "PROJECT_MEMORY_FRAMEWORK.md.backup.20250618_120932",
-        "modified": "2025-06-18T12:09:32.917252",
-        "size_kb": 17.4541015625
-      },
-      {
         "path": "project_state_previous.json",
-        "modified": "2025-06-18T12:09:33.025415",
-        "size_kb": 4.130859375
+        "modified": "2025-06-18T11:52:32.387495",
+        "size_kb": 3.8115234375
       },
       {
         "path": "DEVELOPER_WORKFLOW_INTEGRATION.md",
@@ -123,18 +118,13 @@
       },
       {
         "path": "logs/memory_update.log",
-        "modified": "2025-06-18T12:21:17.371325",
-        "size_kb": 4.1796875
+        "modified": "2025-06-18T12:09:32.762583",
+        "size_kb": 3.1669921875
       },
       {
         "path": "logs/project_state_20250618_111341.json",
         "modified": "2025-06-18T12:07:11.281543",
         "size_kb": 3.189453125
-      },
-      {
-        "path": "logs/project_state_20250618_120933.json",
-        "modified": "2025-06-18T12:09:33.020082",
-        "size_kb": 3.8115234375
       },
       {
         "path": "logs/project_state_20250618_115232.json",
