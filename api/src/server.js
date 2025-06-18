@@ -51,8 +51,43 @@ app.get('/health', (req, res) => {
 
 // API Routes
 
-// Get latest weekly report
+// Get latest weekly report (JSON format for PWA)
 app.get('/api/reports/latest', async (req, res) => {
+  try {
+    const reportsDir = path.join(__dirname, '../../reports');
+    const files = await fs.readdir(reportsDir);
+    
+    // Find latest weekly JSON report
+    const weeklyReports = files
+      .filter(file => file.includes('weekly_report') && file.endsWith('.json'))
+      .sort()
+      .reverse();
+    
+    if (weeklyReports.length === 0) {
+      return res.status(404).json({ error: 'No reports found' });
+    }
+    
+    const latestReport = weeklyReports[0];
+    const reportPath = path.join(reportsDir, latestReport);
+    const reportContent = await fs.readFile(reportPath, 'utf8');
+    const reportData = JSON.parse(reportContent);
+    
+    res.json({
+      success: true,
+      data: reportData
+    });
+    
+  } catch (error) {
+    console.error('Error fetching latest report:', error);
+    res.status(500).json({ 
+      error: 'Failed to fetch latest report',
+      message: error.message 
+    });
+  }
+});
+
+// Get latest weekly report (HTML format for web view)
+app.get('/api/reports/latest/html', async (req, res) => {
   try {
     const reportsDir = path.join(__dirname, '../../reports');
     const files = await fs.readdir(reportsDir);
@@ -87,9 +122,9 @@ app.get('/api/reports/latest', async (req, res) => {
     });
     
   } catch (error) {
-    console.error('Error fetching latest report:', error);
+    console.error('Error fetching latest HTML report:', error);
     res.status(500).json({ 
-      error: 'Failed to fetch latest report',
+      error: 'Failed to fetch latest HTML report',
       message: error.message 
     });
   }
@@ -197,10 +232,19 @@ app.post('/api/scrape/trigger', async (req, res) => {
     
     console.log(`Triggering ${type} scrape with script: ${scriptPath}`);
     
-    // Spawn Python process
+    // Return immediate response for async processing
+    res.json({
+      success: true,
+      message: `${type} scraping started`,
+      type: type,
+      timestamp: new Date().toISOString()
+    });
+    
+    // Spawn Python process asynchronously
     const pythonProcess = spawn('python3', [scriptPath], {
       cwd: path.join(__dirname, '../../'),
-      env: { ...process.env }
+      env: { ...process.env },
+      detached: false
     });
     
     let output = '';
@@ -219,37 +263,62 @@ app.post('/api/scrape/trigger', async (req, res) => {
     pythonProcess.on('close', (code) => {
       if (code === 0) {
         console.log(`${type} scraping completed successfully`);
-        res.json({
-          success: true,
-          message: `${type} scraping completed successfully`,
-          output: output,
-          timestamp: new Date().toISOString()
-        });
+        // Here you could emit a WebSocket event or store completion status
       } else {
         console.error(`${type} scraping failed with code ${code}`);
-        res.status(500).json({
-          success: false,
-          error: `${type} scraping failed`,
-          code: code,
-          output: output,
-          errorOutput: errorOutput
-        });
       }
     });
     
     pythonProcess.on('error', (error) => {
       console.error(`Failed to start ${type} scraping:`, error);
-      res.status(500).json({
-        success: false,
-        error: 'Failed to start scraping process',
-        message: error.message
-      });
     });
     
   } catch (error) {
     console.error('Error triggering scrape:', error);
     res.status(500).json({ 
       error: 'Failed to trigger scraping',
+      message: error.message 
+    });
+  }
+});
+
+// Get scraping status (for checking if scraping is in progress)
+app.get('/api/scrape/status', async (req, res) => {
+  try {
+    // Check if there are any recent reports (within last hour)
+    const reportsDir = path.join(__dirname, '../../reports');
+    const files = await fs.readdir(reportsDir);
+    
+    const recentReports = files
+      .filter(file => file.endsWith('.json'))
+      .map(file => {
+        const filePath = path.join(reportsDir, file);
+        const stats = require('fs').statSync(filePath);
+        return {
+          filename: file,
+          modified: stats.mtime,
+          type: file.includes('weekly') ? 'weekly' : 'daily'
+        };
+      })
+      .filter(report => {
+        const hourAgo = new Date(Date.now() - 60 * 60 * 1000);
+        return new Date(report.modified) > hourAgo;
+      })
+      .sort((a, b) => new Date(b.modified) - new Date(a.modified));
+    
+    res.json({
+      success: true,
+      data: {
+        recentActivity: recentReports.length > 0,
+        lastReport: recentReports[0] || null,
+        timestamp: new Date().toISOString()
+      }
+    });
+    
+  } catch (error) {
+    console.error('Error checking scrape status:', error);
+    res.status(500).json({ 
+      error: 'Failed to check scraping status',
       message: error.message 
     });
   }
