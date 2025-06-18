@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useApi } from '../contexts/ApiContext';
 
 function HomeScreen() {
-  const { getLatestReport, loading: apiLoading, error } = useApi();
+  const { getLatestReport } = useApi();
   const [stats, setStats] = useState({
     totalArticles: 0,
     sources: 0,
