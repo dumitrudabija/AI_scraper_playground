@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-18T12:09:32.847183",
+  "timestamp": "2025-06-18T11:52:32.181971",
   "project_structure": {
     "core_files": [
       {
@@ -15,7 +15,7 @@
       },
       {
         "path": "PROJECT_MEMORY_FRAMEWORK.md",
-        "size_kb": 17.4541015625
+        "size_kb": 16.61328125
       },
       {
         "path": "PROJECT_MEMORY_SUMMARY.md",
@@ -42,11 +42,11 @@
       {
         "name": "logs",
         "path": "logs",
-        "file_count": 3
+        "file_count": 2
       }
     ],
-    "total_files": 15,
-    "total_size_mb": 0.1443767547607422
+    "total_files": 13,
+    "total_size_mb": 0.12230682373046875
   },
   "dependencies": {
     "requirements_file_exists": false,
@@ -58,42 +58,42 @@
     "recent_files_modified": [
       {
         "path": "PROJECT_MEMORY_USAGE_GUIDE.md",
-        "modified": "2025-06-18T12:07:11.281072",
+        "modified": "2025-06-18T08:04:35.970505",
         "size_kb": 11.451171875
       },
       {
         "path": "PROJECT_MEMORY_FRAMEWORK.md",
-        "modified": "2025-06-18T12:09:27.052499",
-        "size_kb": 17.4541015625
+        "modified": "2025-06-18T11:52:26.698117",
+        "size_kb": 16.61328125
       },
       {
         "path": "PROJECT_MEMORY_SUMMARY.md",
-        "modified": "2025-06-18T12:07:11.280818",
+        "modified": "2025-06-18T08:06:43.633372",
         "size_kb": 11.0546875
       },
       {
         "path": "project_state.json",
-        "modified": "2025-06-18T12:09:27.051583",
-        "size_kb": 4.1328125
+        "modified": "2025-06-18T11:52:26.697023",
+        "size_kb": 3.8115234375
       },
       {
         "path": "project_state_tracker.py",
-        "modified": "2025-06-18T12:07:11.282576",
+        "modified": "2025-06-18T08:02:43.808414",
         "size_kb": 19.2275390625
       },
       {
         "path": "setup_project_memory.sh",
-        "modified": "2025-06-18T12:07:11.282883",
+        "modified": "2025-06-18T08:05:35.573603",
         "size_kb": 6.7177734375
       },
       {
         "path": "project_state_previous.json",
-        "modified": "2025-06-18T11:52:32.387495",
-        "size_kb": 3.8115234375
+        "modified": "2025-06-18T11:13:41.915089",
+        "size_kb": 3.49609375
       },
       {
         "path": "DEVELOPER_WORKFLOW_INTEGRATION.md",
-        "modified": "2025-06-18T12:07:11.279981",
+        "modified": "2025-06-18T08:09:18.547963",
         "size_kb": 9.2666015625
       },
       {
@@ -102,13 +102,8 @@
         "size_kb": 16.30859375
       },
       {
-        "path": "PROJECT_MEMORY_FRAMEWORK.md.backup.20250618_115232",
-        "modified": "2025-06-18T11:52:32.230759",
-        "size_kb": 16.61328125
-      },
-      {
         "path": "update_project_memory.sh",
-        "modified": "2025-06-18T12:07:11.283175",
+        "modified": "2025-06-18T08:03:20.128212",
         "size_kb": 5.642578125
       },
       {
@@ -118,18 +113,13 @@
       },
       {
         "path": "logs/memory_update.log",
-        "modified": "2025-06-18T12:09:32.762583",
-        "size_kb": 3.1669921875
+        "modified": "2025-06-18T11:52:32.118753",
+        "size_kb": 2.154296875
       },
       {
         "path": "logs/project_state_20250618_111341.json",
-        "modified": "2025-06-18T12:07:11.281543",
+        "modified": "2025-06-18T11:13:41.911164",
         "size_kb": 3.189453125
-      },
-      {
-        "path": "logs/project_state_20250618_115232.json",
-        "modified": "2025-06-18T12:07:11.281976",
-        "size_kb": 3.49609375
       }
     ],
     "recent_reports_generated": [],
