@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-18T11:13:41.779376",
+  "timestamp": "2025-06-18T11:14:08.127865",
   "project_structure": {
     "core_files": [
       {
@@ -42,11 +42,11 @@
       {
         "name": "logs",
         "path": "logs",
-        "file_count": 1
+        "file_count": 2
       }
     ],
-    "total_files": 11,
-    "total_size_mb": 0.10137081146240234
+    "total_files": 13,
+    "total_size_mb": 0.12151908874511719
   },
   "dependencies": {
     "requirements_file_exists": false,
@@ -63,7 +63,7 @@
       },
       {
         "path": "PROJECT_MEMORY_FRAMEWORK.md",
-        "modified": "2025-06-18T11:13:32.207978",
+        "modified": "2025-06-18T11:13:41.792810",
         "size_kb": 16.30859375
       },
       {
@@ -73,8 +73,8 @@
       },
       {
         "path": "project_state.json",
-        "modified": "2025-06-18T11:13:32.206684",
-        "size_kb": 3.4951171875
+        "modified": "2025-06-18T11:13:41.791989",
+        "size_kb": 3.49609375
       },
       {
         "path": "project_state_tracker.py",
@@ -88,8 +88,8 @@
       },
       {
         "path": "project_state_previous.json",
-        "modified": "2025-06-18T11:03:24.028124",
-        "size_kb": 3.189453125
+        "modified": "2025-06-18T11:13:41.915089",
+        "size_kb": 3.49609375
       },
       {
         "path": "DEVELOPER_WORKFLOW_INTEGRATION.md",
@@ -107,9 +107,19 @@
         "size_kb": 5.642578125
       },
       {
+        "path": "PROJECT_MEMORY_FRAMEWORK.md.backup.20250618_111341",
+        "modified": "2025-06-18T11:13:41.832482",
+        "size_kb": 16.30859375
+      },
+      {
         "path": "logs/memory_update.log",
-        "modified": "2025-06-18T11:13:41.718058",
-        "size_kb": 1.1416015625
+        "modified": "2025-06-18T11:13:41.956320",
+        "size_kb": 1.9677734375
+      },
+      {
+        "path": "logs/project_state_20250618_111341.json",
+        "modified": "2025-06-18T11:13:41.911164",
+        "size_kb": 3.189453125
       }
     ],
     "recent_reports_generated": [],

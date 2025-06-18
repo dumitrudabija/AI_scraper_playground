@@ -51,23 +51,23 @@ app.get('/health', (req, res) => {
 
 // API Routes
 
-// Get latest weekly report (JSON format for PWA)
+// Get latest daily report (JSON format for PWA)
 app.get('/api/reports/latest', async (req, res) => {
   try {
     const reportsDir = path.join(__dirname, '../../reports');
     const files = await fs.readdir(reportsDir);
     
-    // Find latest weekly JSON report
-    const weeklyReports = files
-      .filter(file => file.includes('weekly_report') && file.endsWith('.json'))
+    // Find latest daily JSON report
+    const dailyReports = files
+      .filter(file => file.includes('ai_news_report') && file.endsWith('.json'))
       .sort()
       .reverse();
     
-    if (weeklyReports.length === 0) {
+    if (dailyReports.length === 0) {
       return res.status(404).json({ error: 'No reports found' });
     }
     
-    const latestReport = weeklyReports[0];
+    const latestReport = dailyReports[0];
     const reportPath = path.join(reportsDir, latestReport);
     const reportContent = await fs.readFile(reportPath, 'utf8');
     const reportData = JSON.parse(reportContent);
@@ -86,52 +86,8 @@ app.get('/api/reports/latest', async (req, res) => {
   }
 });
 
-// Get latest weekly report (HTML format for web view)
-app.get('/api/reports/latest/html', async (req, res) => {
-  try {
-    const reportsDir = path.join(__dirname, '../../reports');
-    const files = await fs.readdir(reportsDir);
-    
-    // Find latest weekly HTML report
-    const weeklyReports = files
-      .filter(file => file.includes('weekly_report') && file.endsWith('.html'))
-      .sort()
-      .reverse();
-    
-    if (weeklyReports.length === 0) {
-      return res.status(404).json({ error: 'No reports found' });
-    }
-    
-    const latestReport = weeklyReports[0];
-    const reportPath = path.join(reportsDir, latestReport);
-    const reportContent = await fs.readFile(reportPath, 'utf8');
-    
-    // Extract metadata from filename
-    const dateMatch = latestReport.match(/weekly_report_(\d{4}-\d{2}-\d{2})/);
-    const reportDate = dateMatch ? dateMatch[1] : 'unknown';
-    
-    res.json({
-      success: true,
-      data: {
-        filename: latestReport,
-        date: reportDate,
-        type: 'weekly',
-        content: reportContent,
-        generated_at: new Date().toISOString()
-      }
-    });
-    
-  } catch (error) {
-    console.error('Error fetching latest HTML report:', error);
-    res.status(500).json({ 
-      error: 'Failed to fetch latest HTML report',
-      message: error.message 
-    });
-  }
-});
-
-// Get latest daily report
-app.get('/api/reports/daily/latest', async (req, res) => {
+// Get latest daily report (Markdown format for web view)
+app.get('/api/reports/latest/markdown', async (req, res) => {
   try {
     const reportsDir = path.join(__dirname, '../../reports');
     const files = await fs.readdir(reportsDir);
@@ -224,19 +180,17 @@ app.get('/api/reports/history', async (req, res) => {
 // Trigger on-demand scraping
 app.post('/api/scrape/trigger', async (req, res) => {
   try {
-    const { type = 'weekly' } = req.body;
-    
-    // Determine which scraper to run
-    const scriptName = type === 'daily' ? 'news_scraper.py' : 'weekly_scraper.py';
+    // Only daily scraping is supported now (covers all 11+ sources)
+    const scriptName = 'news_scraper.py';
     const scriptPath = path.join(__dirname, '../../scrapers/', scriptName);
     
-    console.log(`Triggering ${type} scrape with script: ${scriptPath}`);
+    console.log(`Triggering daily scrape with script: ${scriptPath}`);
     
     // Return immediate response for async processing
     res.json({
       success: true,
-      message: `${type} scraping started`,
-      type: type,
+      message: 'Daily scraping started (11+ sources)',
+      type: 'daily',
       timestamp: new Date().toISOString()
     });
     
@@ -262,15 +216,15 @@ app.post('/api/scrape/trigger', async (req, res) => {
     
     pythonProcess.on('close', (code) => {
       if (code === 0) {
-        console.log(`${type} scraping completed successfully`);
+        console.log('Daily scraping completed successfully');
         // Here you could emit a WebSocket event or store completion status
       } else {
-        console.error(`${type} scraping failed with code ${code}`);
+        console.error(`Daily scraping failed with code ${code}`);
       }
     });
     
     pythonProcess.on('error', (error) => {
-      console.error(`Failed to start ${type} scraping:`, error);
+      console.error('Failed to start daily scraping:', error);
     });
     
   } catch (error) {
