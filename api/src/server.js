@@ -193,7 +193,7 @@ app.post('/api/scrape/trigger', async (req, res) => {
     
     // Determine which scraper to run
     const scriptName = type === 'daily' ? 'news_scraper.py' : 'weekly_scraper.py';
-    const scriptPath = path.join(__dirname, '../../', scriptName);
+    const scriptPath = path.join(__dirname, '../../scrapers/', scriptName);
     
     console.log(`Triggering ${type} scrape with script: ${scriptPath}`);
     

@@ -1,0 +1,143 @@
+{
+  "timestamp": "2025-06-18T11:10:17.488662",
+  "project_structure": {
+    "core_files": [
+      {
+        "path": "project_state_tracker.py",
+        "size_kb": 19.2275390625,
+        "lines": 457
+      }
+    ],
+    "documentation_files": [
+      {
+        "path": "PROJECT_MEMORY_USAGE_GUIDE.md",
+        "size_kb": 11.451171875
+      },
+      {
+        "path": "PROJECT_MEMORY_FRAMEWORK.md",
+        "size_kb": 16.30859375
+      },
+      {
+        "path": "PROJECT_MEMORY_SUMMARY.md",
+        "size_kb": 11.0546875
+      },
+      {
+        "path": "DEVELOPER_WORKFLOW_INTEGRATION.md",
+        "size_kb": 9.2666015625
+      }
+    ],
+    "automation_files": [
+      {
+        "path": "setup_project_memory.sh",
+        "size_kb": 6.7177734375,
+        "executable": true
+      },
+      {
+        "path": "update_project_memory.sh",
+        "size_kb": 5.642578125,
+        "executable": true
+      }
+    ],
+    "output_directories": [
+      {
+        "name": "logs",
+        "path": "logs",
+        "file_count": 1
+      }
+    ],
+    "total_files": 11,
+    "total_size_mb": 0.1008901596069336
+  },
+  "dependencies": {
+    "requirements_file_exists": false,
+    "dependencies": [],
+    "python_version": "3.9.6 (default, Nov 11 2024, 03:15:38) \n[Clang 16.0.0 (clang-1600.0.26.6)]",
+    "pip_packages": []
+  },
+  "recent_activity": {
+    "recent_files_modified": [
+      {
+        "path": "PROJECT_MEMORY_USAGE_GUIDE.md",
+        "modified": "2025-06-18T08:04:35.970505",
+        "size_kb": 11.451171875
+      },
+      {
+        "path": "PROJECT_MEMORY_FRAMEWORK.md",
+        "modified": "2025-06-18T11:03:23.922233",
+        "size_kb": 16.30859375
+      },
+      {
+        "path": "PROJECT_MEMORY_SUMMARY.md",
+        "modified": "2025-06-18T08:06:43.633372",
+        "size_kb": 11.0546875
+      },
+      {
+        "path": "project_state.json",
+        "modified": "2025-06-18T11:03:23.921693",
+        "size_kb": 3.189453125
+      },
+      {
+        "path": "project_state_tracker.py",
+        "modified": "2025-06-18T08:02:43.808414",
+        "size_kb": 19.2275390625
+      },
+      {
+        "path": "setup_project_memory.sh",
+        "modified": "2025-06-18T08:05:35.573603",
+        "size_kb": 6.7177734375
+      },
+      {
+        "path": "project_state_previous.json",
+        "modified": "2025-06-18T11:03:24.028124",
+        "size_kb": 3.189453125
+      },
+      {
+        "path": "DEVELOPER_WORKFLOW_INTEGRATION.md",
+        "modified": "2025-06-18T08:09:18.547963",
+        "size_kb": 9.2666015625
+      },
+      {
+        "path": "PROJECT_MEMORY_FRAMEWORK.md.backup.20250618_110323",
+        "modified": "2025-06-18T11:03:23.960418",
+        "size_kb": 16.30859375
+      },
+      {
+        "path": "update_project_memory.sh",
+        "modified": "2025-06-18T08:03:20.128212",
+        "size_kb": 5.642578125
+      },
+      {
+        "path": "logs/memory_update.log",
+        "modified": "2025-06-18T11:03:24.069784",
+        "size_kb": 0.955078125
+      }
+    ],
+    "recent_reports_generated": [],
+    "log_file_status": {},
+    "last_execution_times": {}
+  },
+  "automation_status": {
+    "shell_scripts": [
+      {
+        "name": "run_daily.sh",
+        "exists": false
+      },
+      {
+        "name": "run_weekly.sh",
+        "exists": false
+      },
+      {
+        "name": "setup_weekly_automation.sh",
+        "exists": false
+      }
+    ],
+    "cron_jobs": [],
+    "executable_permissions": {}
+  },
+  "performance_metrics": {
+    "recent_report_sizes": [],
+    "estimated_processing_times": [],
+    "article_counts": [],
+    "success_indicators": []
+  }
+}
