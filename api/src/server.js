@@ -28,7 +28,7 @@ app.use('/api/', limiter);
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
     ? ['https://your-pwa-domain.com', 'https://your-mobile-app.com']
-    : ['http://localhost:3000', 'http://localhost:19006'], // React Native Metro
+    : ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:19006'], // React Native Metro
   credentials: true
 }));
 
