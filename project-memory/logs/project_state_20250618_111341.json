@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-18T11:13:41.779376",
+  "timestamp": "2025-06-18T11:03:23.910532",
   "project_structure": {
     "core_files": [
       {
@@ -45,8 +45,8 @@
         "file_count": 1
       }
     ],
-    "total_files": 11,
-    "total_size_mb": 0.10137081146240234
+    "total_files": 9,
+    "total_size_mb": 0.08074474334716797
   },
   "dependencies": {
     "requirements_file_exists": false,
@@ -63,7 +63,7 @@
       },
       {
         "path": "PROJECT_MEMORY_FRAMEWORK.md",
-        "modified": "2025-06-18T11:13:32.207978",
+        "modified": "2025-06-18T11:03:18.597686",
         "size_kb": 16.30859375
       },
       {
@@ -73,8 +73,8 @@
       },
       {
         "path": "project_state.json",
-        "modified": "2025-06-18T11:13:32.206684",
-        "size_kb": 3.4951171875
+        "modified": "2025-06-18T11:03:18.596561",
+        "size_kb": 2.8271484375
       },
       {
         "path": "project_state_tracker.py",
@@ -87,19 +87,9 @@
         "size_kb": 6.7177734375
       },
       {
-        "path": "project_state_previous.json",
-        "modified": "2025-06-18T11:03:24.028124",
-        "size_kb": 3.189453125
-      },
-      {
         "path": "DEVELOPER_WORKFLOW_INTEGRATION.md",
         "modified": "2025-06-18T08:09:18.547963",
         "size_kb": 9.2666015625
-      },
-      {
-        "path": "PROJECT_MEMORY_FRAMEWORK.md.backup.20250618_110323",
-        "modified": "2025-06-18T11:03:23.960418",
-        "size_kb": 16.30859375
       },
       {
         "path": "update_project_memory.sh",
@@ -108,8 +98,8 @@
       },
       {
         "path": "logs/memory_update.log",
-        "modified": "2025-06-18T11:13:41.718058",
-        "size_kb": 1.1416015625
+        "modified": "2025-06-18T11:03:23.845483",
+        "size_kb": 0.1865234375
       }
     ],
     "recent_reports_generated": [],
