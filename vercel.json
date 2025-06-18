@@ -9,7 +9,7 @@
       "maxDuration": 30
     },
     "api/scrape/trigger.js": {
-      "maxDuration": 300
+      "maxDuration": 60
     },
     "api/scrape/optimized.js": {
       "maxDuration": 60
