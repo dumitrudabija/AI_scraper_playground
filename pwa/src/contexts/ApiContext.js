@@ -51,10 +51,11 @@ export const ApiProvider = ({ children }) => {
     return apiCall('/reports/latest');
   }, [apiCall]);
 
-  // Trigger scraping
+  // Trigger scraping (using optimized endpoint)
   const triggerScrape = useCallback(async () => {
-    return apiCall('/scrape/trigger', {
+    return apiCall('/scrape/optimized', {
       method: 'POST',
+      body: JSON.stringify({ mode: 'quick' }),
     });
   }, [apiCall]);
 

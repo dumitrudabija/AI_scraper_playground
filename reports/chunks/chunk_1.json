@@ -1,0 +1,34 @@
+{
+  "chunk": 1,
+  "timestamp": "2025-06-18T14:37:23.427751",
+  "articles": [
+    {
+      "source": "OpenAI Blog",
+      "source_color": "#00A67E",
+      "title": "Toward understanding and preventing misalignment generalization",
+      "link": "https://openai.com/index/emergent-misalignment",
+      "description": "We study how training on incorrect responses can cause broader misalignment in language models and identify an internal feature driving this behavior—one that can be reversed with minimal fine-tuning.",
+      "pub_date": "2025-06-18T10:00:00",
+      "category": "business"
+    },
+    {
+      "source": "OpenAI Blog",
+      "source_color": "#00A67E",
+      "title": "Preparing for future AI risks in biology",
+      "link": "https://openai.com/index/preparing-for-future-ai-capabilities-in-biology",
+      "description": "Advanced AI can transform biology and medicine—but also raises biosecurity risks. We’re proactively assessing capabilities and implementing safeguards to prevent misuse.",
+      "pub_date": "2025-06-18T10:00:00",
+      "category": "business"
+    },
+    {
+      "source": "OpenAI Blog",
+      "source_color": "#00A67E",
+      "title": "Introducing OpenAI for Government",
+      "link": "https://openai.com/global-affairs/introducing-openai-for-government",
+      "description": "We’re launching OpenAI for Government, a new initiative focused on bringing our most advanced AI tools to public servants across the United States. We're supporting the U.S. government's efforts in ad",
+      "pub_date": "2025-06-16T00:00:00",
+      "category": "business"
+    }
+  ],
+  "count": 3
+}
