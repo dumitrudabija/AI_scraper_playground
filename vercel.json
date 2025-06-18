@@ -1,0 +1,44 @@
+{
+  "version": 2,
+  "name": "ai-news-scraper",
+  "buildCommand": "cd pwa && npm run build",
+  "outputDirectory": "pwa/build",
+  "installCommand": "cd pwa && npm install",
+  "functions": {
+    "api/reports/latest.js": {
+      "maxDuration": 30
+    },
+    "api/scrape/trigger.js": {
+      "maxDuration": 300
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type"
+        }
+      ]
+    }
+  ]
+}

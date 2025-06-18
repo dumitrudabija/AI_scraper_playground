@@ -1,0 +1,29 @@
+{
+  "name": "ai-news-scraper",
+  "version": "1.0.0",
+  "description": "AI News Scraper PWA with daily automated news collection from 11+ sources",
+  "main": "index.js",
+  "scripts": {
+    "build": "cd pwa && npm run build",
+    "start": "cd pwa && npm start",
+    "dev": "cd pwa && npm start",
+    "install-deps": "cd pwa && npm install"
+  },
+  "keywords": [
+    "ai",
+    "news",
+    "scraper",
+    "pwa",
+    "react",
+    "vercel"
+  ],
+  "author": "AI News Scraper",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7"
+  }
+}
