@@ -10,6 +10,9 @@
     },
     "api/scrape/trigger.js": {
       "maxDuration": 300
+    },
+    "api/scrape/optimized.js": {
+      "maxDuration": 60
     }
   },
   "routes": [
