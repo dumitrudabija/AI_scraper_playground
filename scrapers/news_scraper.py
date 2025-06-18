@@ -306,6 +306,47 @@ Please provide a well-structured summary that highlights the most important deve
             logger.error(f"Error saving report: {str(e)}")
             raise
 
+    def save_report_json(self, articles: List[Dict], summary: str) -> str:
+        """Save report as JSON for API consumption."""
+        try:
+            # Create reports directory if it doesn't exist
+            reports_dir = "reports"
+            os.makedirs(reports_dir, exist_ok=True)
+            
+            # Generate report data
+            report_date = datetime.now().strftime('%Y-%m-%d')
+            report_data = {
+                'generated_at': datetime.now().isoformat(),
+                'date': report_date,
+                'type': 'daily',
+                'summary': summary,
+                'articles': articles,
+                'stats': {
+                    'total_articles': len(articles),
+                    'sources': list(set(a['source'] for a in articles)),
+                    'source_counts': {}
+                }
+            }
+            
+            # Calculate source counts
+            for article in articles:
+                source = article['source']
+                report_data['stats']['source_counts'][source] = report_data['stats']['source_counts'].get(source, 0) + 1
+            
+            # Generate filename
+            filename = f"{reports_dir}/ai_news_report_{report_date}.json"
+            
+            # Save JSON report
+            with open(filename, 'w', encoding='utf-8') as f:
+                json.dump(report_data, f, indent=2, ensure_ascii=False)
+            
+            logger.info(f"Daily JSON report saved to {filename}")
+            return filename
+            
+        except Exception as e:
+            logger.error(f"Error saving JSON report: {str(e)}")
+            raise
+
     def run_daily_scrape(self) -> str:
         """Run the complete daily scraping and reporting process."""
         try:
@@ -324,11 +365,14 @@ Please provide a well-structured summary that highlights the most important deve
             # Generate formatted report
             report = self.generate_report(articles, summary)
             
-            # Save report to file
-            filename = self.save_report(report)
+            # Save markdown report to file
+            md_filename = self.save_report(report)
             
-            logger.info(f"Daily scraping completed successfully. Report saved to {filename}")
-            return filename
+            # Save JSON report for API consumption
+            json_filename = self.save_report_json(articles, summary)
+            
+            logger.info(f"Daily scraping completed successfully. Markdown: {md_filename}, JSON: {json_filename}")
+            return md_filename
             
         except Exception as e:
             logger.error(f"Error in daily scraping process: {str(e)}")
