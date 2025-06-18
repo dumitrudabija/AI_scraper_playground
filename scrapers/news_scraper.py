@@ -39,29 +39,82 @@ class AINewsScraper:
         
         self.client = anthropic.Anthropic(api_key=self.anthropic_api_key)
         
-        # News sources configuration
+        # Comprehensive AI news sources configuration (8+ sources for daily coverage)
         self.news_sources = {
+            'openai_blog': {
+                'name': 'OpenAI Blog',
+                'rss_url': 'https://openai.com/blog/rss.xml',
+                'base_url': 'https://openai.com',
+                'color': '#00A67E',
+                'category': 'business'
+            },
+            'anthropic_blog': {
+                'name': 'Anthropic Blog',
+                'rss_url': 'https://www.anthropic.com/news/rss.xml',
+                'base_url': 'https://www.anthropic.com',
+                'color': '#D4A574',
+                'category': 'business'
+            },
+            'google_ai_blog': {
+                'name': 'Google AI Blog',
+                'rss_url': 'https://ai.googleblog.com/feeds/posts/default',
+                'base_url': 'https://ai.googleblog.com',
+                'color': '#4285F4',
+                'category': 'development'
+            },
+            'arxiv_ai': {
+                'name': 'ArXiv AI Papers',
+                'rss_url': 'http://export.arxiv.org/rss/cs.AI',
+                'base_url': 'https://arxiv.org',
+                'color': '#B31B1B',
+                'category': 'development'
+            },
+            'huggingface_blog': {
+                'name': 'Hugging Face Blog',
+                'rss_url': 'https://huggingface.co/blog/feed.xml',
+                'base_url': 'https://huggingface.co',
+                'color': '#FF9D00',
+                'category': 'development'
+            },
+            'github_ai_trending': {
+                'name': 'GitHub AI Trending',
+                'rss_url': 'https://github.com/trending/python.atom',
+                'base_url': 'https://github.com',
+                'color': '#24292e',
+                'category': 'development'
+            },
             'techcrunch_ai': {
                 'name': 'TechCrunch AI',
                 'rss_url': 'https://techcrunch.com/category/artificial-intelligence/feed/',
-                'base_url': 'https://techcrunch.com'
+                'base_url': 'https://techcrunch.com',
+                'color': '#00D100',
+                'category': 'business'
             },
             'venturebeat_ai': {
                 'name': 'VentureBeat AI',
                 'rss_url': 'https://venturebeat.com/ai/feed/',
-                'base_url': 'https://venturebeat.com'
-            },
-            'mit_tech_review': {
-                'name': 'MIT Technology Review',
-                'rss_url': 'https://www.technologyreview.com/feed/',
-                'base_url': 'https://www.technologyreview.com'
-            },
-            'ai_news': {
-                'name': 'AI News',
-                'rss_url': 'https://artificialintelligence-news.com/feed/',
-                'base_url': 'https://artificialintelligence-news.com'
+                'base_url': 'https://venturebeat.com',
+                'color': '#1E88E5',
+                'category': 'business'
             }
         }
+        
+        # Additional sources for comprehensive coverage
+        self.reddit_sources = {
+            'r_MachineLearning': {
+                'name': 'r/MachineLearning',
+                'url': 'https://www.reddit.com/r/MachineLearning/hot.json',
+                'category': 'development'
+            },
+            'r_LocalLLaMA': {
+                'name': 'r/LocalLLaMA', 
+                'url': 'https://www.reddit.com/r/LocalLLaMA/hot.json',
+                'category': 'development'
+            }
+        }
+        
+        # Hacker News AI-related posts
+        self.hackernews_api = 'https://hacker-news.firebaseio.com/v0'
         
         # Request headers to avoid blocking
         self.headers = {
@@ -180,19 +233,171 @@ class AINewsScraper:
             logger.warning(f"Could not extract content from {url}: {str(e)}")
             return ""
 
+    def scrape_reddit_posts(self, subreddit_key: str) -> List[Dict]:
+        """Scrape posts from Reddit subreddits."""
+        source = self.reddit_sources[subreddit_key]
+        articles = []
+        
+        try:
+            logger.info(f"Scraping {source['name']} posts...")
+            
+            response = self.session.get(source['url'], timeout=10)
+            response.raise_for_status()
+            
+            data = response.json()
+            posts = data.get('data', {}).get('children', [])
+            
+            yesterday = datetime.now() - timedelta(days=1)
+            
+            for post_data in posts[:10]:  # Limit to 10 posts per subreddit
+                try:
+                    post = post_data.get('data', {})
+                    
+                    # Skip if not AI-related (basic keyword filter)
+                    title = post.get('title', '').lower()
+                    ai_keywords = ['ai', 'artificial intelligence', 'machine learning', 'ml', 'llm', 'gpt', 'claude', 'openai', 'anthropic', 'model', 'neural', 'deep learning']
+                    if not any(keyword in title for keyword in ai_keywords):
+                        continue
+                    
+                    # Parse creation date
+                    created_utc = post.get('created_utc', 0)
+                    pub_date = datetime.fromtimestamp(created_utc) if created_utc else datetime.now()
+                    
+                    # Skip old posts (older than 24 hours for daily)
+                    if pub_date < yesterday:
+                        continue
+                    
+                    article = {
+                        'source': source['name'],
+                        'source_color': '#FF4500',  # Reddit orange
+                        'title': post.get('title', 'No title'),
+                        'link': f"https://reddit.com{post.get('permalink', '')}",
+                        'description': post.get('selftext', '')[:300] + '...' if post.get('selftext') else f"Score: {post.get('score', 0)} | Comments: {post.get('num_comments', 0)}",
+                        'pub_date': pub_date.strftime('%Y-%m-%d %H:%M:%S'),
+                        'pub_date_formatted': pub_date.strftime('%B %d, %Y at %I:%M %p'),
+                        'content': post.get('selftext', '')[:500] if post.get('selftext') else '',
+                        'category': source['category']
+                    }
+                    
+                    articles.append(article)
+                    logger.info(f"Scraped Reddit: {article['title'][:50]}...")
+                    
+                except Exception as e:
+                    logger.error(f"Error processing Reddit post: {str(e)}")
+                    continue
+            
+            logger.info(f"Successfully scraped {len(articles)} posts from {source['name']}")
+            
+        except Exception as e:
+            logger.error(f"Error scraping {source['name']}: {str(e)}")
+        
+        return articles
+
+    def scrape_hackernews_ai(self) -> List[Dict]:
+        """Scrape AI-related posts from Hacker News."""
+        articles = []
+        
+        try:
+            logger.info("Scraping Hacker News AI posts...")
+            
+            # Get top stories
+            response = self.session.get(f"{self.hackernews_api}/topstories.json", timeout=10)
+            response.raise_for_status()
+            
+            story_ids = response.json()[:50]  # Get top 50 stories
+            yesterday = datetime.now() - timedelta(days=1)
+            
+            for story_id in story_ids[:20]:  # Process first 20 to find AI-related ones
+                try:
+                    # Get story details
+                    story_response = self.session.get(f"{self.hackernews_api}/item/{story_id}.json", timeout=5)
+                    story_response.raise_for_status()
+                    
+                    story = story_response.json()
+                    if not story:
+                        continue
+                    
+                    title = story.get('title', '').lower()
+                    # AI keyword filter
+                    ai_keywords = ['ai', 'artificial intelligence', 'machine learning', 'ml', 'llm', 'gpt', 'claude', 'openai', 'anthropic', 'model', 'neural', 'deep learning', 'chatgpt', 'cursor', 'cline', 'mcp']
+                    if not any(keyword in title for keyword in ai_keywords):
+                        continue
+                    
+                    # Parse date
+                    timestamp = story.get('time', 0)
+                    pub_date = datetime.fromtimestamp(timestamp) if timestamp else datetime.now()
+                    
+                    # Skip old stories (older than 24 hours for daily)
+                    if pub_date < yesterday:
+                        continue
+                    
+                    article = {
+                        'source': 'Hacker News',
+                        'source_color': '#FF6600',
+                        'title': story.get('title', 'No title'),
+                        'link': story.get('url', f"https://news.ycombinator.com/item?id={story_id}"),
+                        'description': f"Score: {story.get('score', 0)} | Comments: {story.get('descendants', 0)} | {story.get('text', '')[:200]}",
+                        'pub_date': pub_date.strftime('%Y-%m-%d %H:%M:%S'),
+                        'pub_date_formatted': pub_date.strftime('%B %d, %Y at %I:%M %p'),
+                        'content': story.get('text', '')[:500] if story.get('text') else '',
+                        'category': 'development'
+                    }
+                    
+                    articles.append(article)
+                    logger.info(f"Scraped HN: {article['title'][:50]}...")
+                    
+                    # Limit to 5 HN articles for daily
+                    if len(articles) >= 5:
+                        break
+                        
+                except Exception as e:
+                    logger.error(f"Error processing HN story {story_id}: {str(e)}")
+                    continue
+            
+            logger.info(f"Successfully scraped {len(articles)} AI posts from Hacker News")
+            
+        except Exception as e:
+            logger.error(f"Error scraping Hacker News: {str(e)}")
+        
+        return articles
+
     def scrape_all_sources(self) -> List[Dict]:
-        """Scrape articles from all configured news sources."""
+        """Scrape articles from all configured news sources (8+ sources)."""
         all_articles = []
         
+        # Scrape RSS feeds (8 sources)
         for source_key in self.news_sources.keys():
             try:
                 articles = self.scrape_rss_feed(source_key)
+                # Add category and color to articles
+                for article in articles:
+                    article['category'] = self.news_sources[source_key]['category']
+                    article['source_color'] = self.news_sources[source_key]['color']
                 all_articles.extend(articles)
             except Exception as e:
                 logger.error(f"Failed to scrape {source_key}: {str(e)}")
                 continue
         
-        logger.info(f"Total articles scraped: {len(all_articles)}")
+        # Scrape Reddit (2 additional sources)
+        for reddit_key in self.reddit_sources.keys():
+            try:
+                articles = self.scrape_reddit_posts(reddit_key)
+                all_articles.extend(articles)
+            except Exception as e:
+                logger.error(f"Failed to scrape {reddit_key}: {str(e)}")
+                continue
+        
+        # Scrape Hacker News (1 additional source)
+        try:
+            hn_articles = self.scrape_hackernews_ai()
+            all_articles.extend(hn_articles)
+        except Exception as e:
+            logger.error(f"Failed to scrape Hacker News: {str(e)}")
+        
+        # Sort articles by publication date (newest first)
+        all_articles.sort(key=lambda x: x['pub_date'], reverse=True)
+        
+        logger.info(f"Total articles scraped from 11+ sources: {len(all_articles)}")
         return all_articles
 
     def summarize_with_anthropic(self, articles: List[Dict]) -> str:
