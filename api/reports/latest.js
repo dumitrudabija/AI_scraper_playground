@@ -69,6 +69,18 @@ async function scrapeAINews() {
       url: 'https://www.reddit.com/r/LocalLLaMA/.rss',
       color: '#FF4500',
       category: 'development'
+    },
+    {
+      name: 'MIT Technology Review',
+      url: 'https://www.technologyreview.com/feed/',
+      color: '#A31621',
+      category: 'business'
+    },
+    {
+      name: 'Wired AI',
+      url: 'https://www.wired.com/feed/tag/ai/latest/rss',
+      color: '#000000',
+      category: 'business'
     }
   ];
 
@@ -290,6 +302,22 @@ function generateSampleArticles() {
       title: 'AI-Powered Data Analysis: New Methodologies',
       link: 'https://github.com/trending',
       description: 'Revolutionary approaches to data analysis powered by artificial intelligence and machine learning.'
+    },
+    {
+      source: 'MIT Technology Review',
+      color: '#A31621',
+      category: 'business',
+      title: 'Breakthrough AI Research Transforms Industry Standards',
+      link: 'https://www.technologyreview.com/',
+      description: 'Comprehensive analysis of cutting-edge AI research and its transformative impact on various industries.'
+    },
+    {
+      source: 'Wired AI',
+      color: '#000000',
+      category: 'business',
+      title: 'Future of Artificial Intelligence: Trends and Predictions',
+      link: 'https://www.wired.com/tag/artificial-intelligence/',
+      description: 'In-depth exploration of emerging AI trends and expert predictions for the future of artificial intelligence.'
     }
   ];
 
