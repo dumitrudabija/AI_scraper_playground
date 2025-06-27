@@ -10,35 +10,27 @@ function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 shadow-sm">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+    <header className="header">
+      <div className="container">
+        <div className="header-content">
           {/* Logo and Title */}
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl flex items-center justify-center shadow-lg">
-              <span className="text-white text-xl font-bold">🤖</span>
+          <div className="header-brand">
+            <div className="header-logo">
+              <span>🤖</span>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-                AI News
-              </h1>
-              <p className="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">
-                Latest AI insights
-              </p>
+              <h1 className="header-title">AI News</h1>
+              <p className="header-subtitle">Latest AI insights</p>
             </div>
           </div>
 
-          {/* Navigation */}
-          <nav className="hidden md:flex items-center space-x-1">
+          {/* Desktop Navigation */}
+          <nav className="nav nav-desktop">
             {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => setCurrentScreen(item.id)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  currentScreen === item.id
-                    ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
-                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
-                }`}
+                className={`nav-item ${currentScreen === item.id ? 'active' : ''}`}
               >
                 <span>{item.icon}</span>
                 <span>{item.label}</span>
@@ -47,16 +39,12 @@ function Header() {
           </nav>
 
           {/* Mobile Navigation */}
-          <nav className="flex md:hidden items-center space-x-1">
+          <nav className="nav nav-mobile">
             {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => setCurrentScreen(item.id)}
-                className={`p-2 rounded-lg text-lg transition-all duration-200 ${
-                  currentScreen === item.id
-                    ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
-                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                }`}
+                className={`nav-item ${currentScreen === item.id ? 'active' : ''}`}
                 title={item.label}
               >
                 {item.icon}
@@ -65,12 +53,12 @@ function Header() {
           </nav>
 
           {/* Actions */}
-          <div className="flex items-center space-x-2">
+          <div className="header-actions">
             {/* Refresh Button */}
             <button
               onClick={refreshData}
               disabled={isRefreshing}
-              className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+              className="btn btn-ghost btn-icon"
               title="Refresh data"
             >
               <svg
@@ -78,6 +66,7 @@ function Header() {
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                style={{ width: '1.25rem', height: '1.25rem' }}
               >
                 <path
                   strokeLinecap="round"
@@ -91,11 +80,16 @@ function Header() {
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+              className="btn btn-ghost btn-icon"
               title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
             >
               {isDarkMode ? (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                  style={{ width: '1.25rem', height: '1.25rem' }}
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -104,7 +98,12 @@ function Header() {
                   />
                 </svg>
               ) : (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                  style={{ width: '1.25rem', height: '1.25rem' }}
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"

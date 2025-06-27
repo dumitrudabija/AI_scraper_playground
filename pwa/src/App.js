@@ -6,7 +6,16 @@ import HomeScreen from './screens/HomeScreen';
 import ReportsScreen from './screens/ReportsScreen';
 
 function AppContent() {
-  const { currentScreen } = useTheme();
+  const { currentScreen, isDarkMode } = useTheme();
+
+  useEffect(() => {
+    // Apply theme to document
+    if (isDarkMode) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+  }, [isDarkMode]);
 
   const renderScreen = () => {
     switch (currentScreen) {
@@ -20,21 +29,18 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+    <div className="app">
       <Header />
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {renderScreen()}
+      <main className="main-content">
+        <div className="container">
+          {renderScreen()}
+        </div>
       </main>
     </div>
   );
 }
 
 function App() {
-  useEffect(() => {
-    // Set dark theme as default
-    document.documentElement.classList.add('dark');
-  }, []);
-
   return (
     <ThemeProvider>
       <ApiProvider>

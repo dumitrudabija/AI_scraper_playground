@@ -41,136 +41,141 @@ function HomeScreen() {
   ];
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y animate-fade-in">
       {/* Hero Section */}
-      <div className="text-center py-12 lg:py-16">
-        <div className="w-20 h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-lg">
-          <span className="text-white text-3xl">🤖</span>
+      <section className="hero">
+        <div className="hero-icon">
+          <span>🤖</span>
         </div>
         
-        <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+        <h1 className="hero-title">
           Welcome to AI News
         </h1>
         
-        <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+        <p className="hero-description">
           Your intelligent companion for staying updated with the latest developments in artificial intelligence, 
           machine learning, and emerging technologies.
         </p>
         
         <button
           onClick={() => setCurrentScreen('reports')}
-          className="btn btn-primary px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+          className="btn btn-primary btn-lg"
         >
-          <span className="mr-2">📊</span>
-          View Latest Reports
+          <span>📊</span>
+          <span>View Latest Reports</span>
         </button>
-      </div>
+      </section>
 
       {/* Features Grid */}
-      <div className="grid lg:grid-cols-3 gap-8">
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-white text-center lg:col-span-3 mb-4">
+      <section className="card card-body-lg">
+        <h2 className="text-3xl font-bold text-primary text-center mb-2xl">
           Why Choose AI News?
         </h2>
-        {features.map((feature, index) => (
-          <div 
-            key={index} 
-            className="card card-hover p-8 text-center animate-slide-up"
-            style={{ animationDelay: `${index * 0.2}s` }}
-          >
-            <div className="text-5xl mb-6">{feature.icon}</div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-              {feature.title}
-            </h3>
-            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-              {feature.description}
-            </p>
-          </div>
-        ))}
-      </div>
-
-      {/* Stats Section */}
-      <div className="card p-8">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-8">
-          Platform Statistics
-        </h2>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map((stat, index) => (
+        <div className="grid grid-cols-1 lg:grid-cols-3">
+          {features.map((feature, index) => (
             <div 
-              key={index}
-              className="text-center p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50 animate-slide-up"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              key={index} 
+              className="card card-hover card-body text-center animate-slide-up"
+              style={{ animationDelay: `${index * 0.2}s` }}
             >
-              <div className="text-2xl mb-2">{stat.icon}</div>
-              <div className="text-2xl font-bold text-primary-600 dark:text-primary-400 mb-1">
-                {stat.value}
-              </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">
-                {stat.label}
-              </div>
+              <div className="text-3xl mb-lg">{feature.icon}</div>
+              <h3 className="text-xl font-semibold text-primary mb-md">
+                {feature.title}
+              </h3>
+              <p className="text-secondary">
+                {feature.description}
+              </p>
             </div>
           ))}
         </div>
-      </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="card card-body-lg">
+        <h2 className="text-2xl font-bold text-primary text-center mb-xl">
+          Platform Statistics
+        </h2>
+        <div className="stats-grid">
+          {stats.map((stat, index) => (
+            <div 
+              key={index}
+              className="stat-card animate-slide-up"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <div className="stat-icon">{stat.icon}</div>
+              <div className="stat-value">{stat.value}</div>
+              <div className="stat-label">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* Sources Section */}
-      <div className="card p-8">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-6">
+      <section className="card card-body-lg">
+        <h2 className="text-2xl font-bold text-primary text-center mb-lg">
           📡 Trusted Sources
         </h2>
         
-        <p className="text-gray-600 dark:text-gray-300 text-center mb-8">
+        <p className="text-secondary text-center mb-xl">
           We aggregate news from the most reputable AI research institutions and publications
         </p>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
           {sources.map((source, index) => (
             <div 
               key={index}
-              className="flex items-center space-x-3 p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 animate-slide-up"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className="flex items-center gap-md p-md transition card-hover animate-slide-up"
+              style={{ 
+                animationDelay: `${index * 0.1}s`,
+                borderRadius: 'var(--radius-md)',
+                backgroundColor: 'var(--color-surface)'
+              }}
             >
               <div 
-                className="w-4 h-4 rounded-full flex-shrink-0"
+                className="source-indicator"
                 style={{ backgroundColor: source.color }}
               ></div>
-              <div className="min-w-0 flex-1">
-                <div className="text-sm font-medium text-gray-900 dark:text-white truncate">
+              <div className="flex-1">
+                <div className="text-sm font-medium text-primary">
                   {source.name}
                 </div>
-                <div className="text-xs text-gray-500 dark:text-gray-400">
+                <div className="text-xs text-muted">
                   {source.category}
                 </div>
               </div>
             </div>
           ))}
         </div>
-      </div>
+      </section>
 
       {/* Call to Action */}
-      <div className="card p-8 text-center bg-gradient-to-r from-primary-50 to-blue-50 dark:from-primary-900/20 dark:to-blue-900/20 border-primary-200 dark:border-primary-800">
-        <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
+      <section className="card card-body-lg text-center" style={{
+        background: 'linear-gradient(135deg, var(--color-primary-light), rgba(59, 130, 246, 0.05))',
+        borderColor: 'var(--color-primary)'
+      }}>
+        <h3 className="text-2xl font-semibold text-primary mb-md">
           Ready to explore the latest in AI?
         </h3>
-        <p className="text-gray-600 dark:text-gray-300 mb-8 text-lg">
+        <p className="text-secondary mb-xl text-lg">
           Discover breaking news, research papers, and industry insights all in one place.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col gap-md justify-center" style={{ gap: 'var(--spacing-md)' }}>
           <button
             onClick={() => setCurrentScreen('reports')}
-            className="btn btn-primary px-8 py-3 font-medium text-lg"
+            className="btn btn-primary btn-lg"
           >
-            <span className="mr-2">📊</span>
-            View Reports
+            <span>📊</span>
+            <span>View Reports</span>
           </button>
           <button
             onClick={() => window.open('https://github.com/dumitrudabija/AI_scraper_playground', '_blank')}
-            className="btn btn-secondary px-8 py-3 font-medium text-lg"
+            className="btn btn-secondary btn-lg"
           >
-            <span className="mr-2">⭐</span>
-            Star on GitHub
+            <span>⭐</span>
+            <span>Star on GitHub</span>
           </button>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
