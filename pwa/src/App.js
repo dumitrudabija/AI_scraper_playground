@@ -4,7 +4,6 @@ import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import Header from './components/Header';
 import HomeScreen from './screens/HomeScreen';
 import ReportsScreen from './screens/ReportsScreen';
-import SettingsScreen from './screens/SettingsScreen';
 
 function AppContent() {
   const { currentScreen } = useTheme();
@@ -15,8 +14,6 @@ function AppContent() {
         return <HomeScreen />;
       case 'reports':
         return <ReportsScreen />;
-      case 'settings':
-        return <SettingsScreen />;
       default:
         return <HomeScreen />;
     }
