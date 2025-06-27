@@ -348,8 +348,8 @@ export default async function handler(req, res) {
     // Generate fresh data directly (no file system dependency)
     const rawArticles = await scrapeAINews();
     
-    // Enhance articles with AI summaries
-    const articles = await enhanceWithAI(rawArticles);
+    // Skip AI enhancement for now to avoid timeouts
+    const articles = rawArticles;
     
     // Calculate source statistics
     const sourceStats = {};
