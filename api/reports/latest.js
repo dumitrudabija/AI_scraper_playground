@@ -2,7 +2,44 @@
 async function scrapeAINews() {
   console.log('Scraping AI news sources...');
   
-  const sources = [
+  // Complete source list matching the settings screen
+  const allSources = [
+    {
+      name: 'OpenAI Blog',
+      url: 'https://openai.com/blog/rss.xml',
+      color: '#00A67E',
+      category: 'business'
+    },
+    {
+      name: 'Anthropic Blog',
+      url: 'https://www.anthropic.com/news/rss.xml',
+      color: '#D4A574',
+      category: 'business'
+    },
+    {
+      name: 'Google AI Blog',
+      url: 'https://ai.googleblog.com/feeds/posts/default',
+      color: '#4285F4',
+      category: 'development'
+    },
+    {
+      name: 'ArXiv AI Papers',
+      url: 'http://export.arxiv.org/rss/cs.AI',
+      color: '#B31B1B',
+      category: 'development'
+    },
+    {
+      name: 'Hugging Face Blog',
+      url: 'https://huggingface.co/blog/feed.xml',
+      color: '#FF9D00',
+      category: 'development'
+    },
+    {
+      name: 'GitHub AI Trending',
+      url: 'https://github.com/trending/machine-learning.atom',
+      color: '#24292e',
+      category: 'development'
+    },
     {
       name: 'TechCrunch AI',
       url: 'https://techcrunch.com/category/artificial-intelligence/feed/',
@@ -16,30 +53,34 @@ async function scrapeAINews() {
       category: 'business'
     },
     {
-      name: 'MIT Technology Review',
-      url: 'https://www.technologyreview.com/feed/',
-      color: '#FF6B6B',
-      category: 'development'
-    },
-    {
-      name: 'AI News',
-      url: 'https://artificialintelligence-news.com/feed/',
-      color: '#4ECDC4',
+      name: 'Hacker News',
+      url: 'https://hnrss.org/newest?q=AI+OR+artificial+intelligence+OR+machine+learning',
+      color: '#FF6600',
       category: 'business'
     },
     {
-      name: 'Ars Technica AI',
-      url: 'https://feeds.arstechnica.com/arstechnica/technology-lab',
+      name: 'r/MachineLearning',
+      url: 'https://www.reddit.com/r/MachineLearning/.rss',
       color: '#FF4500',
       category: 'development'
     },
     {
-      name: 'Wired AI',
-      url: 'https://www.wired.com/feed/tag/ai/latest/rss',
-      color: '#000000',
-      category: 'business'
+      name: 'r/LocalLLaMA',
+      url: 'https://www.reddit.com/r/LocalLLaMA/.rss',
+      color: '#FF4500',
+      category: 'development'
     }
   ];
+
+  // Default enabled sources (matching settings screen defaults)
+  const defaultEnabledSources = [
+    'OpenAI Blog', 'Anthropic Blog', 'Google AI Blog', 'ArXiv AI Papers',
+    'Hugging Face Blog', 'GitHub AI Trending', 'TechCrunch AI', 'VentureBeat AI', 'Hacker News'
+    // Note: r/MachineLearning and r/LocalLLaMA are disabled by default in settings
+  ];
+
+  // Filter sources based on enabled list (for now use defaults, later we'll make this dynamic)
+  const sources = allSources.filter(source => defaultEnabledSources.includes(source.name));
 
   const articles = [];
   
