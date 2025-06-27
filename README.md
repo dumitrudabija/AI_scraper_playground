@@ -35,7 +35,7 @@ A real-time AI news aggregation platform featuring a Progressive Web App (PWA) w
 15. **r/LocalLLaMA** - Local AI model discussions ⏳ **CONFIGURED**
 16. **Additional Sources** - Expandable architecture for more sources
 
-**Current Status**: 6-7 sources actively working, 16 total configured
+**Current Status**: 8 RSS sources + 2 HTML sources = 10 total configured, 6-8 actively working
 
 ## 🚀 **Quick Start**
 

@@ -2,7 +2,7 @@
 
 **Status**: ✅ **PRODUCTION READY - REAL DATA FLOWING**  
 **Version**: 2.0  
-**Last Updated**: June 27, 2025  
+**Last Updated**: June 27, 2025 - 3:00 PM EST
 **Deployment**: https://ai-scraper-playground.vercel.app/
 
 ## 🎯 **Current Functionality**
@@ -16,18 +16,23 @@
 - **AI Enhancement**: Anthropic Claude integration for article summaries
 - **Robust Fallback System**: Real URLs even when RSS scraping fails
 
-### **📊 Data Sources (Active)**
-1. **OpenAI Blog** - `https://openai.com/blog/rss.xml`
-2. **Anthropic Blog** - `https://www.anthropic.com/news/rss.xml`
-3. **Google AI Blog** - `https://ai.googleblog.com/feeds/posts/default`
-4. **ArXiv AI Papers** - `http://export.arxiv.org/rss/cs.AI`
+### **📊 Data Sources (10 Total)**
+
+#### **✅ RSS Sources (Working)**
+1. **ArXiv AI Papers** - `http://export.arxiv.org/rss/cs.AI`
+2. **TechCrunch AI** - `https://techcrunch.com/category/artificial-intelligence/feed/`
+3. **MIT Technology Review** - `https://www.technologyreview.com/feed/`
+4. **Wired AI** - `https://www.wired.com/feed/tag/ai/latest/rss`
 5. **Hugging Face Blog** - `https://huggingface.co/blog/feed.xml`
-6. **GitHub AI Trending** - `https://github.com/trending/machine-learning.atom`
-7. **TechCrunch AI** - `https://techcrunch.com/category/artificial-intelligence/feed/`
+6. **Google AI Blog** - `https://blog.google/technology/ai/rss/`
+7. **AI News** - `https://artificialintelligence-news.com/feed/`
 8. **VentureBeat AI** - `https://venturebeat.com/ai/feed/`
-9. **Hacker News** - `https://hnrss.org/newest?q=AI+OR+artificial+intelligence+OR+machine+learning`
-10. **r/MachineLearning** - `https://www.reddit.com/r/MachineLearning/.rss`
-11. **r/LocalLLaMA** - `https://www.reddit.com/r/LocalLLaMA/.rss`
+
+#### **🔬 HTML Sources (Experimental)**
+9. **OpenAI Blog** - `https://openai.com/blog` (HTML scraping)
+10. **Anthropic Blog** - `https://www.anthropic.com/news` (HTML scraping)
+
+**Note**: HTML sources may be blocked by anti-bot measures but provide access to official company blogs
 
 ## 🏗️ **Architecture Overview**
 
