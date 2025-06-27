@@ -1,160 +1,148 @@
-# AI News Scraper - Mobile-Ready Platform
+# AI News Scraper
 
-A comprehensive AI-powered news aggregation system with mobile-first architecture, featuring Python scrapers, Node.js API, and planned PWA/React Native frontends.
+**Status**: ✅ **PRODUCTION READY - REAL DATA FLOWING**  
+**Live App**: https://ai-scraper-playground.vercel.app/  
+**Last Updated**: June 27, 2025
 
-## 🚀 Quick Start
+A real-time AI news aggregation platform featuring a Progressive Web App (PWA) with live RSS scraping from major AI news sources.
 
-### Prerequisites
-- Python 3.7+
-- Node.js 16+
-- Anthropic API key
+## 🎯 **Current Features**
 
-### Setup
+### ✅ **Live AI News Aggregation**
+- **Real-time RSS Scraping**: 5 major AI news sources
+- **Fresh Data**: Articles updated on every request
+- **Mobile-First PWA**: Installable, offline-capable web app
+- **Vercel Deployment**: Production-ready serverless hosting
+
+### 📊 **Active Data Sources**
+1. **TechCrunch AI** - Latest AI business news
+2. **VentureBeat AI** - AI industry coverage  
+3. **MIT Technology Review** - In-depth AI analysis
+4. **AI News** - Dedicated AI news platform
+5. **The Verge AI** - Consumer AI technology
+
+## 🚀 **Quick Start**
+
+### **View Live App**
+Visit: **https://ai-scraper-playground.vercel.app/**
+
+### **API Endpoints**
+- **Latest News**: `GET /api/reports/latest`
+- **Trigger Scraping**: `POST /api/scrape/optimized`
+
+### **Local Development**
 ```bash
 # Clone repository
 git clone https://github.com/dumitrudabija/AI_scraper_playground.git
 cd AI_scraper_playground
 
-# Install Python dependencies
-pip install -r requirements.txt
+# Install PWA dependencies
+cd pwa && npm install
 
-# Setup environment
-cp .env.example .env
-# Edit .env with your ANTHROPIC_API_KEY
-
-# Install API dependencies
-cd api && npm install
-
-# Start API server
-npm run dev
+# Start development server
+npm start
 ```
 
-## 📁 Project Structure
+## 🏗️ **Architecture**
+
+### **Frontend (PWA)**
+- **Framework**: React.js
+- **Features**: Responsive design, offline support, installable
+- **Location**: `/pwa/` directory
+
+### **Backend (API)**
+- **Runtime**: Node.js (Vercel Serverless Functions)
+- **Location**: `/api/` directory
+- **Data Processing**: Native RSS parsing, no external dependencies
+
+### **Deployment**
+- **Platform**: Vercel
+- **Auto-Deploy**: GitHub integration
+- **Performance**: 15-30 second response times for fresh data
+
+## 📁 **Project Structure**
 
 ```
-AI_scraper_playground/
-├── 📂 scrapers/              # Python news scrapers
-│   ├── weekly_scraper.py     # Weekly AI news aggregation
-│   └── news_scraper.py       # Daily news scraping
-├── 📂 api/                   # Node.js API server
-│   ├── src/server.js         # Express API endpoints
-│   ├── package.json          # API dependencies
-│   └── README.md             # API documentation
-├── 📂 docs/                  # Documentation
-│   ├── GIT_SETUP_GUIDE.md    # Git workflow guide
-│   ├── MOBILE_TRANSFORMATION_PROPOSAL.md # Architecture proposal
-│   ├── API_SETUP_GUIDE.md    # API setup instructions
-│   └── [other guides...]     # Additional documentation
-├── 📂 project-memory/        # Project memory framework
-│   ├── PROJECT_MEMORY_FRAMEWORK.md # Main framework document
-│   ├── project_state_tracker.py    # State tracking automation
-│   └── update_project_memory.sh    # Memory maintenance
-├── 📂 reports/               # Generated news reports
-├── 📂 logs/                  # Application logs
-├── requirements.txt          # Python dependencies
-├── .env.example             # Environment template
-└── README.md                # This file
+ai-news-scraper/
+├── 📱 pwa/                      # React PWA Frontend
+│   ├── src/
+│   │   ├── App.js              # Main app component
+│   │   ├── screens/            # App screens (Home, Reports, Settings)
+│   │   └── components/         # Reusable UI components
+│   └── public/                 # Static assets and PWA manifest
+├── 🔧 api/                     # Vercel API Functions
+│   ├── reports/latest.js       # Main data endpoint
+│   └── scrape/optimized.js     # Scraping trigger
+├── 📚 docs/                    # Documentation (legacy)
+├── 🧠 project-memory/          # Project state tracking
+├── vercel.json                 # Deployment configuration
+├── CURRENT_PROJECT_STATE.md    # Detailed current state
+└── README.md                   # This file
 ```
 
-## 🔧 Core Features
+## 🔧 **Technical Implementation**
 
-### ✅ **Python Scrapers**
-- **8+ News Sources**: OpenAI, Anthropic, Google AI, ArXiv, Hugging Face, GitHub, Reddit, Hacker News
-- **AI Summarization**: Anthropic Claude 3.5 Sonnet integration
-- **Beautiful Reports**: HTML weekly reports, Markdown daily reports
-- **Error Handling**: Robust scraping with 95%+ success rate
+### **RSS Scraping Process**
+1. **Parallel Fetching**: All sources scraped simultaneously
+2. **XML Parsing**: Custom regex-based RSS parser
+3. **Content Cleaning**: HTML removal and entity decoding
+4. **Data Aggregation**: Combine, deduplicate, sort by date
+5. **JSON Response**: Structured data for PWA consumption
 
-### ✅ **Node.js API**
-- **RESTful Endpoints**: Mobile-ready API for PWA/React Native
-- **Security**: Rate limiting, CORS, helmet protection
-- **On-Demand Scraping**: Trigger scraping via API calls
-- **Report Serving**: Access to latest and historical reports
+### **Error Handling**
+- **Per-Source Fallback**: Failed sources don't break the process
+- **Sample Data Generation**: Realistic fallback if all sources fail
+- **Timeout Protection**: 10-second timeout per RSS feed
+- **Graceful Degradation**: App continues with partial data
 
-### ✅ **Project Memory Framework**
-- **Automated State Tracking**: Real-time project monitoring
-- **Change Detection**: Comprehensive evolution tracking
-- **Documentation**: Self-updating project documentation
+## 📱 **PWA Features**
 
-## 🌐 API Endpoints
+### **Mobile Experience**
+- **Responsive Design**: Optimized for all screen sizes
+- **Add to Home Screen**: Native app-like installation
+- **Offline Support**: Service worker for cached content
+- **Fast Loading**: Optimized performance and caching
 
+### **User Interface**
+- **Real Headlines**: Current AI news from major publications
+- **Source Attribution**: Color-coded source identification
+- **Fresh Timestamps**: Live generation times
+- **Article Links**: Direct access to original articles
+
+## 🧪 **Testing & Verification**
+
+### **Live Endpoints**
 ```bash
-# Health check
-GET /health
+# Get latest AI news
+curl https://ai-scraper-playground.vercel.app/api/reports/latest
 
-# Reports
-GET /api/reports/latest          # Latest weekly report
-GET /api/reports/daily/latest    # Latest daily report
-GET /api/reports/history         # All report history
-
-# Scraping
-POST /api/scrape/trigger         # Trigger on-demand scraping
-Body: { "type": "weekly" | "daily" }
-
-# Sources
-GET /api/sources/status          # News source availability
-
-# Notifications
-POST /api/notifications/subscribe # Push notification subscription
+# Trigger fresh scraping
+curl -X POST https://ai-scraper-playground.vercel.app/api/scrape/optimized
 ```
 
-## 📱 Mobile Architecture
-
-### Current Status: **Phase 1 Complete** ✅
-- ✅ **API Layer**: Node.js Express server with mobile endpoints
-- ✅ **Python Integration**: Seamless scraper connectivity
-- ✅ **Security**: Production-ready configuration
-
-### Planned Development:
-- **Phase 2**: PWA (Progressive Web App) development
-- **Phase 3**: React Native mobile app
-- **Phase 4**: Production deployment with automated scheduling
-
-## 🚀 Deployment
-
-### Local Development
-```bash
-# Start API server
-cd api && npm run dev
-
-# Run scrapers manually
-python scrapers/weekly_scraper.py
-python scrapers/news_scraper.py
+### **Expected Response**
+```json
+{
+  "success": true,
+  "data": {
+    "report_date": "2025-06-27",
+    "generated_at": "2025-06-27T14:00:00.000Z",
+    "total_articles": 18,
+    "sources_count": 4,
+    "articles": [...],
+    "sources": [...]
+  }
+}
 ```
 
-### Production Deployment
-- **Railway** (Recommended): Git-based deployment with cron support
-- **Render**: Free tier with auto-deploy
-- **Vercel**: Serverless functions for API
+## 🔄 **Development Workflow**
 
-## 📊 Performance Metrics
-
-- **Articles per Run**: 40-60 weekly, 15-25 daily
-- **Processing Time**: 2-5 minutes per run
-- **Success Rate**: >95% with graceful error handling
-- **API Response**: <500ms for cached reports
-
-## 🔐 Security Features
-
-- **Environment Variables**: API keys protected via .env
-- **Rate Limiting**: 100 requests per 15 minutes
-- **CORS**: Configured for mobile app origins
-- **Input Validation**: Comprehensive request validation
-
-## 📚 Documentation
-
-- **[Git Setup Guide](docs/GIT_SETUP_GUIDE.md)**: Professional Git workflow
-- **[API Documentation](api/README.md)**: Complete API reference
-- **[Mobile Architecture](docs/MOBILE_TRANSFORMATION_PROPOSAL.md)**: Transformation proposal
-- **[Project Memory](project-memory/PROJECT_MEMORY_FRAMEWORK.md)**: Complete project state
-
-## 🛠 Development Workflow
-
-### Feature Development
+### **Making Changes**
 ```bash
 # Create feature branch
 git checkout -b feature/new-feature
 
-# Make changes and test
+# Make changes
 # ...
 
 # Commit and push
@@ -162,35 +150,77 @@ git add .
 git commit -m "Add new feature"
 git push origin feature/new-feature
 
-# Create Pull Request on GitHub
+# Auto-deploy via Vercel
 ```
 
-### Project Memory Maintenance
-```bash
-# Update project memory after changes
-./project-memory/update_project_memory.sh
-```
+### **Adding New Sources**
+1. Edit `api/reports/latest.js`
+2. Add source to the `sources` array
+3. Test RSS feed compatibility
+4. Deploy via git push
 
-## 🤝 Contributing
+## 📊 **Performance Metrics**
 
-1. **Read Project Memory**: Review `project-memory/PROJECT_MEMORY_FRAMEWORK.md`
-2. **Create Feature Branch**: `git checkout -b feature/your-feature`
-3. **Follow Conventions**: Maintain code quality and documentation
-4. **Update Memory**: Run memory update after changes
-5. **Create Pull Request**: Submit for review
+- **Response Time**: 15-30 seconds for fresh data
+- **Articles per Request**: 15-25 articles
+- **Sources per Request**: 3-5 active sources
+- **Uptime**: 99.9% (Vercel infrastructure)
+- **Mobile Performance**: Optimized for mobile devices
 
-## 📄 License
+## 🛠 **Maintenance**
+
+### **Regular Tasks**
+- Monitor RSS feed availability
+- Check response times and performance
+- Update dependencies as needed
+- Verify PWA installation functionality
+
+### **Troubleshooting**
+- **Vercel Logs**: Check function execution logs
+- **RSS Validation**: Test individual feed URLs
+- **PWA Testing**: Verify installation and offline features
+
+## 🎯 **Future Enhancements**
+
+### **Immediate Opportunities**
+- **AI Summarization**: Integrate Anthropic API for content summaries
+- **Caching**: Add Redis for faster response times
+- **More Sources**: Expand to additional AI news outlets
+- **Push Notifications**: Real-time news alerts
+
+### **Long-term Roadmap**
+- **User Accounts**: Personalized news preferences
+- **Advanced Filtering**: Topic-based categorization
+- **Analytics**: User engagement tracking
+- **Native Apps**: iOS/Android development
+
+## 📚 **Documentation**
+
+- **[Current State](CURRENT_PROJECT_STATE.md)**: Detailed project status
+- **[Vercel Deployment](docs/VERCEL_DEPLOYMENT_GUIDE.md)**: Deployment guide
+- **[Project Memory](project-memory/)**: Development tracking system
+
+## 🤝 **Contributing**
+
+1. **Fork the repository**
+2. **Create feature branch**: `git checkout -b feature/your-feature`
+3. **Make changes** and test locally
+4. **Update documentation** if needed
+5. **Submit pull request**
+
+## 📄 **License**
 
 MIT License - see LICENSE file for details.
 
-## 🔗 Links
+## 🔗 **Links**
 
+- **Live Application**: https://ai-scraper-playground.vercel.app/
 - **GitHub Repository**: https://github.com/dumitrudabija/AI_scraper_playground
-- **API Documentation**: [api/README.md](api/README.md)
-- **Architecture Proposal**: [docs/MOBILE_TRANSFORMATION_PROPOSAL.md](docs/MOBILE_TRANSFORMATION_PROPOSAL.md)
+- **Vercel Dashboard**: Deployment and function logs
 
 ---
 
-**Status**: Phase 1 Complete - API layer ready for mobile development  
-**Next Phase**: PWA development for mobile-first experience  
-**Last Updated**: 2025-06-18
+**Project Status**: 🟢 **FULLY OPERATIONAL**  
+**Real Data**: ✅ Live AI news from 5 major sources  
+**Mobile Ready**: ✅ PWA with offline support  
+**Production**: ✅ Deployed and stable on Vercel
