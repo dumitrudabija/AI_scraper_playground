@@ -72,12 +72,12 @@ async function scrapeAINews() {
     }
   ];
 
-  // Use only reliable, fast sources to avoid timeouts
+  // Use reliable, fast sources - expanded list
   const reliableSources = [
-    'TechCrunch AI', 'VentureBeat AI', 'Hacker News'
+    'TechCrunch AI', 'VentureBeat AI', 'Google AI Blog', 'OpenAI Blog', 'Anthropic Blog'
   ];
 
-  // Filter sources based on reliable list to avoid timeouts
+  // Filter sources based on reliable list
   const sources = allSources.filter(source => reliableSources.includes(source.name));
 
   const articles = [];
@@ -138,18 +138,9 @@ function parseRSSFeed(xmlText, source) {
       let description = extractXMLTag(item, 'description');
       const pubDate = extractXMLTag(item, 'pubDate');
       
-      // For Hacker News, extract title from description if title is empty
-      if (source.name === 'Hacker News' && (!title || title.trim() === '')) {
-        const urlMatch = description.match(/Article URL: ([^\s]+)/);
-        if (urlMatch) {
-          // Try to extract a meaningful title from the URL
-          const url = urlMatch[1];
-          const pathParts = url.split('/').filter(part => part && part !== 'www');
-          title = pathParts[pathParts.length - 1]
-            .replace(/[-_]/g, ' ')
-            .replace(/\.(html|php|aspx?)$/i, '')
-            .replace(/\b\w/g, l => l.toUpperCase());
-        }
+      // Skip articles with empty or URL-like titles
+      if (!title || title.trim() === '' || title.startsWith('http')) {
+        continue;
       }
       
       if (title && link && title.trim() !== '') {
@@ -316,13 +307,12 @@ async function generateAISummary(article, apiKey) {
         max_tokens: 150,
         messages: [{
           role: 'user',
-          content: `Please create a concise, engaging summary (2-3 sentences, max 150 words) for this AI news article:
+          content: `Create a very short, catchy phrase (5-8 words max) that captures the essence of this AI news:
 
 Title: ${article.title}
 Description: ${article.description}
-Source: ${article.source}
 
-Focus on the key AI development, its significance, and potential impact. Make it informative yet accessible.`
+Return only the phrase, nothing else. Examples: "New AI model beats GPT-4", "Meta acquires voice AI startup", "AI safety breakthrough announced"`
         }]
       })
     });
@@ -362,8 +352,8 @@ export default async function handler(req, res) {
     // Generate fresh data directly (no file system dependency)
     const rawArticles = await scrapeAINews();
     
-    // Skip AI enhancement for now to avoid timeouts
-    const articles = rawArticles;
+    // Enable AI enhancement with short phrases
+    const articles = await enhanceWithAI(rawArticles);
     
     // Calculate source statistics
     const sourceStats = {};
