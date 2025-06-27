@@ -29,12 +29,6 @@ async function scrapeAINews() {
       category: 'development'
     },
     {
-      name: 'Hugging Face Blog',
-      url: 'https://huggingface.co/blog/feed.xml',
-      color: '#FF9D00',
-      category: 'development'
-    },
-    {
       name: 'GitHub AI Trending',
       url: 'https://github.com/trending/machine-learning.atom',
       color: '#24292e',
@@ -81,6 +75,18 @@ async function scrapeAINews() {
       url: 'https://www.wired.com/feed/tag/ai/latest/rss',
       color: '#000000',
       category: 'business'
+    },
+    {
+      name: 'Hugging Face Blog',
+      url: 'https://huggingface.co/blog/feed.xml',
+      color: '#FF9D00',
+      category: 'development'
+    },
+    {
+      name: 'The Gradient',
+      url: 'https://thegradient.pub/rss/',
+      color: '#6B46C1',
+      category: 'development'
     }
   ];
 
@@ -318,6 +324,14 @@ function generateSampleArticles() {
       title: 'Future of Artificial Intelligence: Trends and Predictions',
       link: 'https://www.wired.com/tag/artificial-intelligence/',
       description: 'In-depth exploration of emerging AI trends and expert predictions for the future of artificial intelligence.'
+    },
+    {
+      source: 'The Gradient',
+      color: '#6B46C1',
+      category: 'development',
+      title: 'Deep Learning Research: Architectural Innovations and Breakthroughs',
+      link: 'https://thegradient.pub/',
+      description: 'Comprehensive analysis of cutting-edge deep learning research, architectural innovations, and their implications for AI development.'
     }
   ];
 
