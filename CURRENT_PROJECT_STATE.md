@@ -2,7 +2,7 @@
 
 **Status**: ✅ **PRODUCTION READY - REAL DATA FLOWING**  
 **Version**: 2.0  
-**Last Updated**: June 27, 2025 - 3:00 PM EST
+**Last Updated**: June 27, 2025 - 3:25 PM EST
 **Deployment**: https://ai-scraper-playground.vercel.app/
 
 ## 🎯 **Current Functionality**
@@ -120,6 +120,9 @@ ai-news-scraper/
 - **Fixed Read More Button**: Replaced all example.com URLs with real AI news source URLs
 - **Enhanced Fallback System**: Added proper fallback function to main API endpoint
 - **Improved Error Handling**: No more broken links when RSS scraping fails
+- **UI Cleanup**: Removed redundant article action buttons, cleaner interface with header refresh button
+- **Enhanced AI Summaries**: Expanded to paragraph format (50-80 words)
+- **Added HTML Scraping**: OpenAI & Anthropic blog support via custom parsers
 
 ## 📱 **User Experience**
 
