@@ -1,5 +1,187 @@
-const fs = require('fs').promises;
-const path = require('path');
+// Import the scraping functions from the optimized scraper
+async function scrapeAINews() {
+  console.log('Scraping AI news sources...');
+  
+  const sources = [
+    {
+      name: 'TechCrunch AI',
+      url: 'https://techcrunch.com/category/artificial-intelligence/feed/',
+      color: '#00D100',
+      category: 'business'
+    },
+    {
+      name: 'VentureBeat AI',
+      url: 'https://venturebeat.com/ai/feed/',
+      color: '#1E88E5',
+      category: 'business'
+    },
+    {
+      name: 'MIT Technology Review',
+      url: 'https://www.technologyreview.com/feed/',
+      color: '#FF6B6B',
+      category: 'development'
+    },
+    {
+      name: 'AI News',
+      url: 'https://artificialintelligence-news.com/feed/',
+      color: '#4ECDC4',
+      category: 'business'
+    },
+    {
+      name: 'The Verge AI',
+      url: 'https://www.theverge.com/ai-artificial-intelligence/rss/index.xml',
+      color: '#FA7268',
+      category: 'business'
+    }
+  ];
+
+  const articles = [];
+  
+  for (const source of sources) {
+    try {
+      console.log(`Scraping ${source.name}...`);
+      const sourceArticles = await scrapeRSSFeed(source);
+      articles.push(...sourceArticles);
+      console.log(`Found ${sourceArticles.length} articles from ${source.name}`);
+    } catch (error) {
+      console.error(`Error scraping ${source.name}:`, error.message);
+    }
+  }
+
+  if (articles.length === 0) {
+    console.log('No articles scraped, generating sample data...');
+    return generateSampleArticles();
+  }
+
+  articles.sort((a, b) => new Date(b.pub_date) - new Date(a.pub_date));
+  return articles.slice(0, 20);
+}
+
+async function scrapeRSSFeed(source) {
+  try {
+    const response = await fetch(source.url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; AI-News-Scraper/1.0)'
+      },
+      timeout: 10000
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const xmlText = await response.text();
+    const articles = parseRSSFeed(xmlText, source);
+    return articles;
+    
+  } catch (error) {
+    console.error(`Failed to scrape ${source.name}:`, error.message);
+    return [];
+  }
+}
+
+function parseRSSFeed(xmlText, source) {
+  const articles = [];
+  
+  try {
+    const itemRegex = /<item[^>]*>([\s\S]*?)<\/item>/gi;
+    const items = xmlText.match(itemRegex) || [];
+    
+    for (const item of items.slice(0, 5)) {
+      const title = extractXMLTag(item, 'title');
+      const link = extractXMLTag(item, 'link');
+      const description = extractXMLTag(item, 'description');
+      const pubDate = extractXMLTag(item, 'pubDate');
+      
+      if (title && link) {
+        articles.push({
+          source: source.name,
+          source_color: source.color,
+          title: cleanText(title),
+          link: link.trim(),
+          description: cleanText(description).substring(0, 200),
+          pub_date: parsePubDate(pubDate),
+          category: source.category
+        });
+      }
+    }
+  } catch (error) {
+    console.error(`Error parsing RSS for ${source.name}:`, error.message);
+  }
+  
+  return articles;
+}
+
+function extractXMLTag(xml, tagName) {
+  const regex = new RegExp(`<${tagName}[^>]*>([\\s\\S]*?)<\\/${tagName}>`, 'i');
+  const match = xml.match(regex);
+  return match ? match[1] : '';
+}
+
+function cleanText(text) {
+  if (!text) return '';
+  
+  return text
+    .replace(/<[^>]*>/g, '')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function parsePubDate(dateStr) {
+  if (!dateStr) return new Date().toISOString();
+  
+  try {
+    const date = new Date(dateStr);
+    return date.toISOString();
+  } catch (error) {
+    return new Date().toISOString();
+  }
+}
+
+function generateSampleArticles() {
+  const now = new Date();
+  const sources = [
+    { name: 'TechCrunch AI', color: '#00D100', category: 'business' },
+    { name: 'VentureBeat AI', color: '#1E88E5', category: 'business' },
+    { name: 'MIT Technology Review', color: '#FF6B6B', category: 'development' },
+    { name: 'AI News', color: '#4ECDC4', category: 'business' },
+    { name: 'The Verge AI', color: '#FA7268', category: 'business' }
+  ];
+
+  const sampleTitles = [
+    'New AI Model Achieves Breakthrough in Natural Language Understanding',
+    'Machine Learning Advances in Computer Vision Applications',
+    'AI Safety Research: Latest Developments and Challenges',
+    'Large Language Models: Performance and Efficiency Improvements',
+    'AI in Healthcare: Revolutionary Applications and Case Studies',
+    'Robotics and AI Integration: Future Possibilities',
+    'Neural Network Architecture Innovations',
+    'AI Ethics and Responsible Development Practices',
+    'Automated Code Generation: Tools and Techniques',
+    'AI-Powered Data Analysis: New Methodologies'
+  ];
+
+  return sampleTitles.map((title, index) => {
+    const source = sources[index % sources.length];
+    const hoursAgo = Math.floor(Math.random() * 48) + 1;
+    const pubDate = new Date(now.getTime() - hoursAgo * 60 * 60 * 1000);
+    
+    return {
+      source: source.name,
+      source_color: source.color,
+      title: title,
+      link: `https://example.com/article-${index + 1}`,
+      description: `Latest developments in AI technology and research. This article covers recent advances and their implications for the future of artificial intelligence.`,
+      pub_date: pubDate.toISOString(),
+      category: source.category
+    };
+  });
+}
 
 export default async function handler(req, res) {
   // Set CORS headers
@@ -18,100 +200,32 @@ export default async function handler(req, res) {
   }
 
   try {
-    // In Vercel, we need to look for reports in the project root
-    const reportsDir = path.join(process.cwd(), 'reports');
+    console.log('🔄 Generating fresh AI news report...');
     
-    let files;
-    try {
-      files = await fs.readdir(reportsDir);
-    } catch (error) {
-      // If reports directory doesn't exist, return sample data
-      console.log('Reports directory not found, returning sample data');
-      return res.json({
-        success: true,
-        data: {
-          report_date: new Date().toISOString().split('T')[0],
-          total_articles: 26,
-          sources_count: 6,
-          articles: [
-            {
-              title: "The 'OpenAI Files' push for oversight in the race to AGI",
-              source: "TechCrunch AI",
-              source_color: "#00D084",
-              category: "Business",
-              description: "A group of current and former OpenAI employees are calling for greater oversight and transparency in AI development as the race to artificial general intelligence intensifies.",
-              link: "https://techcrunch.com/2024/06/18/openai-files-oversight-agi/",
-              pub_date: "2024-06-18T10:30:00Z"
-            },
-            {
-              title: "Google's Gemini AI gets major upgrade with improved reasoning",
-              source: "Google AI Blog",
-              source_color: "#4285F4",
-              category: "Development",
-              description: "Google announces significant improvements to Gemini's reasoning capabilities, with enhanced performance on complex mathematical and logical problems.",
-              link: "https://ai.googleblog.com/2024/06/gemini-reasoning-upgrade.html",
-              pub_date: "2024-06-18T09:15:00Z"
-            },
-            {
-              title: "Meta releases Llama 3.1 with 405B parameters",
-              source: "Meta AI",
-              source_color: "#1877F2",
-              category: "Development",
-              description: "Meta's largest language model yet, Llama 3.1 405B, sets new benchmarks in AI performance while maintaining open-source accessibility.",
-              link: "https://ai.meta.com/blog/llama-3-1-405b/",
-              pub_date: "2024-06-18T08:00:00Z"
-            }
-          ],
-          sources: [
-            { name: "TechCrunch AI", count: 8, color: "#00D084" },
-            { name: "Google AI Blog", count: 6, color: "#4285F4" },
-            { name: "Meta AI", count: 4, color: "#1877F2" },
-            { name: "OpenAI Blog", count: 3, color: "#412991" },
-            { name: "Anthropic", count: 3, color: "#D4A574" },
-            { name: "ArXiv", count: 2, color: "#B31B1B" }
-          ],
-          generated_at: new Date().toISOString()
-        }
-      });
+    // Generate fresh data directly (no file system dependency)
+    const articles = await scrapeAINews();
+    
+    // Calculate source statistics
+    const sourceStats = {};
+    for (const article of articles) {
+      const source = article.source;
+      const color = article.source_color;
+      if (!sourceStats[source]) {
+        sourceStats[source] = { name: source, count: 0, color: color };
+      }
+      sourceStats[source].count++;
     }
+
+    const reportData = {
+      report_date: new Date().toISOString().split('T')[0],
+      generated_at: new Date().toISOString(),
+      total_articles: articles.length,
+      sources_count: new Set(articles.map(a => a.source)).size,
+      articles: articles,
+      sources: Object.values(sourceStats)
+    };
     
-    // Find latest daily JSON report
-    const dailyReports = files
-      .filter(file => file.includes('ai_news_report') && file.endsWith('.json'))
-      .sort()
-      .reverse();
-    
-    if (dailyReports.length === 0) {
-      // Return sample data if no reports found
-      return res.json({
-        success: true,
-        data: {
-          report_date: new Date().toISOString().split('T')[0],
-          total_articles: 26,
-          sources_count: 6,
-          articles: [
-            {
-              title: "Sample AI News Article",
-              source: "AI News Source",
-              source_color: "#6366f1",
-              category: "Development",
-              description: "This is sample data while the scraping system is being set up.",
-              link: "https://example.com",
-              pub_date: new Date().toISOString()
-            }
-          ],
-          sources: [
-            { name: "AI News Source", count: 26, color: "#6366f1" }
-          ],
-          generated_at: new Date().toISOString()
-        }
-      });
-    }
-    
-    const latestReport = dailyReports[0];
-    const reportPath = path.join(reportsDir, latestReport);
-    const reportContent = await fs.readFile(reportPath, 'utf8');
-    const reportData = JSON.parse(reportContent);
+    console.log(`✅ Generated report with ${articles.length} articles from ${reportData.sources_count} sources`);
     
     res.json({
       success: true,
@@ -119,9 +233,9 @@ export default async function handler(req, res) {
     });
     
   } catch (error) {
-    console.error('Error fetching latest report:', error);
+    console.error('Error generating fresh report:', error);
     res.status(500).json({ 
-      error: 'Failed to fetch latest report',
+      error: 'Failed to generate fresh report',
       message: error.message 
     });
   }
