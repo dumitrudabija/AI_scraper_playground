@@ -4,22 +4,30 @@
 **Live App**: https://ai-scraper-playground.vercel.app/  
 **Last Updated**: June 27, 2025
 
-A real-time AI news aggregation platform featuring a Progressive Web App (PWA) with live RSS scraping from major AI news sources.
+A real-time AI news aggregation platform featuring a Progressive Web App (PWA) with live RSS scraping from 11 major AI news sources and AI-powered article summaries.
 
 ## 🎯 **Current Features**
 
 ### ✅ **Live AI News Aggregation**
-- **Real-time RSS Scraping**: 5 major AI news sources
+- **Real-time RSS Scraping**: 11 major AI news sources
 - **Fresh Data**: Articles updated on every request
+- **AI Enhancement**: Claude-powered article summaries
 - **Mobile-First PWA**: Installable, offline-capable web app
 - **Vercel Deployment**: Production-ready serverless hosting
+- **Smart Fallback**: Real URLs even when RSS scraping fails
 
 ### 📊 **Active Data Sources**
-1. **TechCrunch AI** - Latest AI business news
-2. **VentureBeat AI** - AI industry coverage  
-3. **MIT Technology Review** - In-depth AI analysis
-4. **AI News** - Dedicated AI news platform
-5. **The Verge AI** - Consumer AI technology
+1. **OpenAI Blog** - Latest AI research and announcements
+2. **Anthropic Blog** - AI safety and research updates
+3. **Google AI Blog** - Google's AI research and developments
+4. **ArXiv AI Papers** - Latest academic AI research
+5. **Hugging Face Blog** - Open-source AI and ML updates
+6. **GitHub AI Trending** - Popular AI repositories and projects
+7. **TechCrunch AI** - AI business and industry news
+8. **VentureBeat AI** - AI startup and investment news
+9. **Hacker News** - AI discussions and community insights
+10. **r/MachineLearning** - Reddit ML community updates
+11. **r/LocalLLaMA** - Local AI model discussions
 
 ## 🚀 **Quick Start**
 
@@ -49,16 +57,19 @@ npm start
 - **Framework**: React.js
 - **Features**: Responsive design, offline support, installable
 - **Location**: `/pwa/` directory
+- **API Integration**: Connects to Vercel serverless functions
 
 ### **Backend (API)**
 - **Runtime**: Node.js (Vercel Serverless Functions)
 - **Location**: `/api/` directory
 - **Data Processing**: Native RSS parsing, no external dependencies
+- **AI Enhancement**: Anthropic Claude integration
 
 ### **Deployment**
 - **Platform**: Vercel
 - **Auto-Deploy**: GitHub integration
 - **Performance**: 15-30 second response times for fresh data
+- **AI Enhancement**: 10-15 articles enhanced per request
 
 ## 📁 **Project Structure**
 
@@ -68,7 +79,8 @@ ai-news-scraper/
 │   ├── src/
 │   │   ├── App.js              # Main app component
 │   │   ├── screens/            # App screens (Home, Reports, Settings)
-│   │   └── components/         # Reusable UI components
+│   │   ├── components/         # Reusable UI components
+│   │   └── contexts/           # API and Theme contexts
 │   └── public/                 # Static assets and PWA manifest
 ├── 🔧 api/                     # Vercel API Functions
 │   ├── reports/latest.js       # Main data endpoint
@@ -83,17 +95,25 @@ ai-news-scraper/
 ## 🔧 **Technical Implementation**
 
 ### **RSS Scraping Process**
-1. **Parallel Fetching**: All sources scraped simultaneously
+1. **Parallel Fetching**: All 11 sources scraped simultaneously
 2. **XML Parsing**: Custom regex-based RSS parser
 3. **Content Cleaning**: HTML removal and entity decoding
-4. **Data Aggregation**: Combine, deduplicate, sort by date
-5. **JSON Response**: Structured data for PWA consumption
+4. **Quality Filtering**: Skip short, empty, or malformed articles
+5. **Data Aggregation**: Combine, deduplicate, sort by date
+6. **AI Enhancement**: Claude generates catchy summaries
+7. **JSON Response**: Structured data for PWA consumption
 
-### **Error Handling**
+### **Error Handling & Fallback**
 - **Per-Source Fallback**: Failed sources don't break the process
-- **Sample Data Generation**: Realistic fallback if all sources fail
+- **Smart Fallback Data**: Real AI news source URLs (no example.com)
 - **Timeout Protection**: 10-second timeout per RSS feed
 - **Graceful Degradation**: App continues with partial data
+- **AI Fallback**: Original descriptions if AI enhancement fails
+
+### **Recent Updates (June 27, 2025)**
+- **Fixed Read More Button**: All links now point to real articles
+- **Enhanced Fallback System**: Proper error handling with real URLs
+- **AI Integration**: Working Claude summaries for better UX
 
 ## 📱 **PWA Features**
 
@@ -106,8 +126,9 @@ ai-news-scraper/
 ### **User Interface**
 - **Real Headlines**: Current AI news from major publications
 - **Source Attribution**: Color-coded source identification
+- **AI Summaries**: Short, catchy phrases for quick understanding
 - **Fresh Timestamps**: Live generation times
-- **Article Links**: Direct access to original articles
+- **Working Links**: All "Read More" buttons open real articles
 
 ## 🧪 **Testing & Verification**
 
@@ -126,11 +147,12 @@ curl -X POST https://ai-scraper-playground.vercel.app/api/scrape/optimized
   "success": true,
   "data": {
     "report_date": "2025-06-27",
-    "generated_at": "2025-06-27T14:00:00.000Z",
+    "generated_at": "2025-06-27T17:00:00.000Z",
     "total_articles": 18,
-    "sources_count": 4,
+    "sources_count": 8,
     "articles": [...],
-    "sources": [...]
+    "sources": [...],
+    "ai_enhanced": 15
   }
 }
 ```
@@ -155,15 +177,17 @@ git push origin feature/new-feature
 
 ### **Adding New Sources**
 1. Edit `api/reports/latest.js`
-2. Add source to the `sources` array
-3. Test RSS feed compatibility
-4. Deploy via git push
+2. Add source to the `allSources` array
+3. Add corresponding fallback URL to `generateSampleArticles`
+4. Test RSS feed compatibility
+5. Deploy via git push
 
 ## 📊 **Performance Metrics**
 
 - **Response Time**: 15-30 seconds for fresh data
 - **Articles per Request**: 15-25 articles
-- **Sources per Request**: 3-5 active sources
+- **Sources per Request**: 5-11 active sources
+- **AI Enhancement**: 10-15 articles per request
 - **Uptime**: 99.9% (Vercel infrastructure)
 - **Mobile Performance**: Optimized for mobile devices
 
@@ -174,31 +198,33 @@ git push origin feature/new-feature
 - Check response times and performance
 - Update dependencies as needed
 - Verify PWA installation functionality
+- Monitor AI API usage and costs
 
 ### **Troubleshooting**
 - **Vercel Logs**: Check function execution logs
 - **RSS Validation**: Test individual feed URLs
 - **PWA Testing**: Verify installation and offline features
+- **AI Enhancement**: Monitor Claude API responses
 
 ## 🎯 **Future Enhancements**
 
 ### **Immediate Opportunities**
-- **AI Summarization**: Integrate Anthropic API for content summaries
-- **Caching**: Add Redis for faster response times
 - **More Sources**: Expand to additional AI news outlets
+- **Caching**: Add Redis for faster response times
 - **Push Notifications**: Real-time news alerts
+- **Advanced Filtering**: Topic-based categorization
 
 ### **Long-term Roadmap**
 - **User Accounts**: Personalized news preferences
-- **Advanced Filtering**: Topic-based categorization
 - **Analytics**: User engagement tracking
 - **Native Apps**: iOS/Android development
+- **Advanced AI**: Better summarization and categorization
 
 ## 📚 **Documentation**
 
 - **[Current State](CURRENT_PROJECT_STATE.md)**: Detailed project status
-- **[Vercel Deployment](docs/VERCEL_DEPLOYMENT_GUIDE.md)**: Deployment guide
 - **[Project Memory](project-memory/)**: Development tracking system
+- **[Vercel Deployment](docs/VERCEL_DEPLOYMENT_GUIDE.md)**: Deployment guide
 
 ## 🤝 **Contributing**
 
@@ -216,11 +242,13 @@ MIT License - see LICENSE file for details.
 
 - **Live Application**: https://ai-scraper-playground.vercel.app/
 - **GitHub Repository**: https://github.com/dumitrudabija/AI_scraper_playground
-- **Vercel Dashboard**: Deployment and function logs
+- **Main API Endpoint**: https://ai-scraper-playground.vercel.app/api/reports/latest
 
 ---
 
 **Project Status**: 🟢 **FULLY OPERATIONAL**  
-**Real Data**: ✅ Live AI news from 5 major sources  
+**Real Data**: ✅ Live AI news from 11 major sources  
 **Mobile Ready**: ✅ PWA with offline support  
-**Production**: ✅ Deployed and stable on Vercel
+**Production**: ✅ Deployed and stable on Vercel  
+**AI Enhanced**: ✅ Claude-powered article summaries  
+**Quality Links**: ✅ All "Read More" buttons work properly

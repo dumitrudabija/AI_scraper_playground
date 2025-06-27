@@ -1,351 +1,304 @@
-# AI News Scraper - Developer Workflow Integration
+# Developer Workflow Integration Guide
 
-## 🎯 Mandatory Workflow for All Code Changes
+**Last Updated**: June 27, 2025  
+**Project**: AI News Scraper  
+**Status**: ✅ Production Ready
 
-This document establishes the **mandatory workflow** that must be followed before making any code changes to ensure the project memory framework is always consulted and updated.
+## 🎯 **Current Workflow Overview**
 
-## 📋 Pre-Development Checklist
+This guide establishes the standard workflow for making changes to the AI News Scraper project, ensuring consistency, quality, and proper documentation.
 
-### ✅ STEP 1: Read Current Project State
-**BEFORE making ANY code changes, ALWAYS:**
+## 🏗️ **Project Architecture Understanding**
 
+### **Key Components**
+- **Frontend**: React.js PWA in `/pwa/` directory
+- **Backend**: Node.js Vercel serverless functions in `/api/` directory
+- **Main API**: `api/reports/latest.js` (primary data endpoint)
+- **Secondary API**: `api/scrape/optimized.js` (manual trigger)
+- **Deployment**: Vercel with GitHub auto-deploy
+- **AI Enhancement**: Anthropic Claude integration
+
+### **Data Flow**
+1. PWA calls `/api/reports/latest`
+2. API scrapes 11 RSS sources in parallel
+3. Articles processed and enhanced with AI summaries
+4. JSON response returned to PWA
+5. PWA displays articles with working "Read More" links
+
+## 🔄 **Standard Development Workflow**
+
+### **1. Pre-Development Setup**
 ```bash
-# 1. Read the main framework document
-cat PROJECT_MEMORY_FRAMEWORK.md
+# Ensure you're on the latest main branch
+git checkout main
+git pull origin main
 
-# 2. Check current project state
-./project_state_tracker.py
-
-# 3. Review recent changes
-cat project_state.json | python3 -c "
-import json, sys
-data = json.load(sys.stdin)
-print('Recent files modified:')
-for f in data['recent_activity']['recent_files_modified'][-10:]:
-    print(f'  - {f[\"path\"]} ({f[\"modified\"]})')
-"
+# Check current project state
+cat CURRENT_PROJECT_STATE.md
+cat project-memory/PROJECT_MEMORY_SUMMARY.md
 ```
 
-### ✅ STEP 2: Understand Current Architecture
-**Review these sections in PROJECT_MEMORY_FRAMEWORK.md:**
-- Current Project State
-- Architecture Overview  
-- File Structure and Dependencies
-- Known Limitations
-- Recent Changes
+### **2. Making Changes**
 
-### ✅ STEP 3: Validate Understanding
-**Ask yourself:**
-- What is the current implementation status?
-- What files will my changes affect?
-- How do my changes fit into the existing architecture?
-- What dependencies might be impacted?
-- Are there any known limitations I need to consider?
-
-## 🔄 Post-Development Checklist
-
-### ✅ STEP 1: Update Project Memory
-**AFTER making ANY code changes, ALWAYS:**
-
+#### **For Frontend Changes (PWA)**
 ```bash
-# 1. Run complete memory update
-./update_project_memory.sh
+# Navigate to PWA directory
+cd pwa
 
-# 2. Verify state was captured
-cat project_state.json | python3 -c "
-import json, sys
-data = json.load(sys.stdin)
-print(f'Last updated: {data[\"timestamp\"]}')
-print(f'Total files: {data[\"project_structure\"][\"total_files\"]}')
-"
+# Install dependencies if needed
+npm install
+
+# Start development server
+npm start
+
+# Make changes to React components
+# Test locally at http://localhost:3000
 ```
 
-### ✅ STEP 2: Update Framework Documentation
-**Manually update PROJECT_MEMORY_FRAMEWORK.md for:**
-
-#### Architecture Changes
+#### **For Backend Changes (API)**
 ```bash
-# If you modified system architecture, update:
-# - Architecture Overview section
-# - Data Flow description
-# - Technology Stack details
+# Edit API functions in /api/ directory
+# Main endpoint: api/reports/latest.js
+# Secondary: api/scrape/optimized.js
+
+# Test locally using curl or Postman
+# Note: Vercel functions need to be deployed to test fully
 ```
 
-#### New Features
+### **3. Testing Changes**
+
+#### **Local Testing**
 ```bash
-# If you added new features, update:
-# - Current Project State > Core Features Implemented
-# - File Structure and Dependencies
-# - Configuration Management (if applicable)
+# For PWA changes
+cd pwa && npm start
+
+# For API changes (limited local testing)
+# Full testing requires deployment to Vercel
 ```
 
-#### Bug Fixes
+#### **API Testing Commands**
 ```bash
-# If you fixed bugs, update:
-# - Known Limitations section
-# - Recent Changes section
-# - Performance Metrics (if applicable)
+# Test main endpoint
+curl https://ai-scraper-playground.vercel.app/api/reports/latest
+
+# Check for quality issues
+curl -s https://ai-scraper-playground.vercel.app/api/reports/latest | grep -c "example.com"
+
+# Test secondary endpoint
+curl -X POST https://ai-scraper-playground.vercel.app/api/scrape/optimized
 ```
 
-#### Configuration Changes
+### **4. Deployment Process**
+
+#### **Standard Deployment**
 ```bash
-# If you changed configuration, update:
-# - Configuration Management section
-# - Environment Variables
-# - Source Configurations
-```
-
-### ✅ STEP 3: Document Changes
-**Add to Change History section:**
-
-```markdown
-### Recent Changes (YYYY-MM-DD):
-- ✅ [Description of change]
-- ✅ [Files modified]
-- ✅ [Impact on architecture/functionality]
-- ✅ [Any new dependencies or requirements]
-```
-
-## 🚨 Mandatory Integration Points
-
-### Before Starting Development
-```bash
-#!/bin/bash
-# pre-development-check.sh
-echo "🔍 Checking current project state..."
-./project_state_tracker.py
-echo ""
-echo "📖 Please review PROJECT_MEMORY_FRAMEWORK.md before proceeding"
-echo "Press Enter when you've reviewed the current state..."
-read
-```
-
-### After Completing Development
-```bash
-#!/bin/bash
-# post-development-update.sh
-echo "🔄 Updating project memory..."
-./update_project_memory.sh
-echo ""
-echo "📝 Please update PROJECT_MEMORY_FRAMEWORK.md with your changes"
-echo "   - Architecture changes"
-echo "   - New features"
-echo "   - Bug fixes"
-echo "   - Configuration changes"
-echo ""
-echo "✅ Memory update complete"
-```
-
-## 📚 Framework Consultation Guidelines
-
-### What to Check Before Changes
-
-#### For New Features:
-1. **Current Implementation Status** - What's already implemented?
-2. **Architecture Overview** - How does this fit in?
-3. **File Structure** - Where should new files go?
-4. **Dependencies** - What libraries are already used?
-5. **Configuration** - What settings exist?
-
-#### For Bug Fixes:
-1. **Known Limitations** - Is this a documented issue?
-2. **Recent Changes** - Has this area been modified recently?
-3. **Performance Metrics** - Are there performance implications?
-4. **Error Handling** - How are similar errors handled?
-
-#### For Refactoring:
-1. **Architecture Overview** - What's the current design?
-2. **File Structure** - What files will be affected?
-3. **Dependencies** - What might break?
-4. **Change History** - Why was it designed this way?
-
-### What to Update After Changes
-
-#### Always Update:
-- **Last Updated timestamp** (automatic via update script)
-- **Recent Changes section** with your modifications
-- **Performance Metrics** if applicable
-
-#### Update When Applicable:
-- **Architecture Overview** for structural changes
-- **File Structure** for new/moved/deleted files
-- **Dependencies** for new requirements
-- **Configuration** for new settings
-- **Known Limitations** for fixes or new issues
-- **Future Roadmap** for completed items
-
-## 🔧 Automation Integration
-
-### Git Hooks Integration
-```bash
-# .git/hooks/pre-commit
-#!/bin/bash
-echo "Checking project memory framework..."
-if [ ! -f "PROJECT_MEMORY_FRAMEWORK.md" ]; then
-    echo "❌ PROJECT_MEMORY_FRAMEWORK.md not found"
-    exit 1
-fi
-
-# Check if framework is recent (within 24 hours)
-if [ $(find PROJECT_MEMORY_FRAMEWORK.md -mtime -1 | wc -l) -eq 0 ]; then
-    echo "⚠️  PROJECT_MEMORY_FRAMEWORK.md is older than 24 hours"
-    echo "   Please run ./update_project_memory.sh before committing"
-    exit 1
-fi
-```
-
-### IDE Integration
-```json
-// VS Code tasks.json
-{
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "Check Project Memory",
-            "type": "shell",
-            "command": "./project_state_tracker.py",
-            "group": "build",
-            "presentation": {
-                "echo": true,
-                "reveal": "always"
-            }
-        },
-        {
-            "label": "Update Project Memory",
-            "type": "shell",
-            "command": "./update_project_memory.sh",
-            "group": "build",
-            "presentation": {
-                "echo": true,
-                "reveal": "always"
-            }
-        }
-    ]
-}
-```
-
-## 📋 Development Workflow Template
-
-### Starting New Work
-```bash
-# 1. Check current state
-./project_state_tracker.py
-
-# 2. Read framework documentation
-code PROJECT_MEMORY_FRAMEWORK.md
-
-# 3. Understand current architecture
-# Review relevant sections based on your work
-
-# 4. Plan your changes
-# Consider impact on existing architecture
-
-# 5. Begin development
-```
-
-### During Development
-```bash
-# Periodically check if your changes align with documented architecture
-# If you discover the documentation is outdated, note what needs updating
-```
-
-### Completing Work
-```bash
-# 1. Test your changes
-# Run existing tests and verify functionality
-
-# 2. Update project memory
-./update_project_memory.sh
-
-# 3. Update framework documentation
-# Edit PROJECT_MEMORY_FRAMEWORK.md with your changes
-
-# 4. Commit changes
+# Add changes
 git add .
-git commit -m "Description of changes + Updated project memory"
+
+# Commit with descriptive message
+git commit -m "Description of changes made"
+
+# Push to trigger auto-deployment
+git push origin main
+
+# Vercel automatically deploys within 1-2 minutes
 ```
 
-## 🎯 Quality Gates
-
-### Before Code Review
-- [ ] PROJECT_MEMORY_FRAMEWORK.md has been consulted
-- [ ] Current project state has been verified
-- [ ] Changes align with documented architecture
-- [ ] Framework documentation has been updated
-- [ ] Memory update script has been run
-
-### Before Deployment
-- [ ] All framework documentation is current
-- [ ] Project state reflects actual implementation
-- [ ] Performance metrics are updated
-- [ ] Known limitations are documented
-- [ ] Change history is complete
-
-## 🚨 Enforcement Mechanisms
-
-### Automated Checks
+#### **Verification After Deployment**
 ```bash
-# check-memory-compliance.sh
-#!/bin/bash
-FRAMEWORK_AGE=$(find PROJECT_MEMORY_FRAMEWORK.md -mtime +1 | wc -l)
-STATE_EXISTS=$([ -f project_state.json ] && echo "1" || echo "0")
+# Wait for deployment (1-2 minutes)
+sleep 120
 
-if [ "$FRAMEWORK_AGE" -gt 0 ]; then
-    echo "❌ Framework documentation is outdated"
-    exit 1
-fi
+# Test live endpoints
+curl https://ai-scraper-playground.vercel.app/api/reports/latest
 
-if [ "$STATE_EXISTS" -eq 0 ]; then
-    echo "❌ Project state not tracked"
-    exit 1
-fi
-
-echo "✅ Memory compliance check passed"
+# Verify PWA functionality
+# Visit: https://ai-scraper-playground.vercel.app/
 ```
 
-### Manual Verification
-- Code reviews must verify framework consultation
-- Deployment checklists must include memory updates
-- Documentation reviews must validate accuracy
+### **5. Documentation Updates**
 
-## 📈 Benefits of This Workflow
+#### **Required Documentation Updates**
+```bash
+# Update project state
+vim CURRENT_PROJECT_STATE.md
 
-### For Current Development
-- **Never work with outdated information**
-- **Always understand current architecture**
-- **Prevent architectural drift**
-- **Maintain documentation accuracy**
+# Update project memory
+vim project-memory/PROJECT_MEMORY_SUMMARY.md
 
-### For Future Development
-- **Complete context for any changes**
-- **Historical understanding of decisions**
-- **Accurate troubleshooting information**
-- **Seamless knowledge transfer**
+# Update README if needed
+vim README.md
 
-### For Project Maintenance
-- **Self-documenting changes**
-- **Automated compliance checking**
-- **Consistent development practices**
-- **Reduced technical debt**
+# Commit documentation updates
+git add CURRENT_PROJECT_STATE.md project-memory/PROJECT_MEMORY_SUMMARY.md README.md
+git commit -m "Update documentation after [change description]"
+git push origin main
+```
 
-## 🎯 Success Metrics
+## 🔧 **Common Development Tasks**
 
-### Compliance Tracking
-- Framework consultation before changes: **Target 100%**
-- Memory updates after changes: **Target 100%**
-- Documentation accuracy: **Target >95%**
-- Change history completeness: **Target 100%**
+### **Adding New RSS Sources**
 
-### Quality Indicators
-- Reduced debugging time due to accurate documentation
-- Faster onboarding for new developers
-- Fewer architectural inconsistencies
-- Better decision-making with complete context
+#### **Step-by-Step Process**
+1. **Edit Main API File**
+   ```javascript
+   // In api/reports/latest.js
+   // Add to allSources array:
+   {
+     name: 'New Source Name',
+     url: 'https://example.com/rss.xml',
+     color: '#HEXCOLOR',
+     category: 'business' // or 'development'
+   }
+   ```
+
+2. **Update Fallback Function**
+   ```javascript
+   // In generateSampleArticles function
+   // Add corresponding fallback entry with real URL
+   {
+     source: 'New Source Name',
+     color: '#HEXCOLOR',
+     category: 'business',
+     title: 'Sample Article Title',
+     link: 'https://real-source-website.com',
+     description: 'Sample description'
+   }
+   ```
+
+3. **Test RSS Feed**
+   ```bash
+   # Verify RSS feed works
+   curl -I https://example.com/rss.xml
+   ```
+
+4. **Deploy and Verify**
+   ```bash
+   git add api/reports/latest.js
+   git commit -m "Add new RSS source: [Source Name]"
+   git push origin main
+   
+   # Test after deployment
+   curl https://ai-scraper-playground.vercel.app/api/reports/latest
+   ```
+
+### **Fixing API Issues**
+
+#### **Common Issues and Solutions**
+1. **RSS Feed Failures**
+   - Check feed URL accessibility
+   - Verify RSS format compatibility
+   - Update timeout settings if needed
+
+2. **AI Enhancement Issues**
+   - Check Anthropic API key in Vercel environment
+   - Monitor API usage and rate limits
+   - Verify request format
+
+3. **Fallback System Issues**
+   - Ensure generateSampleArticles has real URLs
+   - Test fallback when RSS scraping fails
+   - Verify no example.com URLs remain
+
+### **PWA Updates**
+
+#### **Common PWA Tasks**
+1. **UI/UX Changes**
+   - Edit components in `/pwa/src/components/`
+   - Update screens in `/pwa/src/screens/`
+   - Test responsive design
+
+2. **API Integration Changes**
+   - Update `/pwa/src/contexts/ApiContext.js`
+   - Ensure proper error handling
+   - Test loading states
+
+3. **PWA Features**
+   - Update `/pwa/public/manifest.json`
+   - Modify service worker if needed
+   - Test installation and offline features
+
+## 🧪 **Quality Assurance Checklist**
+
+### **Before Deployment**
+- [ ] Code changes tested locally where possible
+- [ ] No hardcoded example.com URLs
+- [ ] Error handling implemented
+- [ ] Documentation updated
+
+### **After Deployment**
+- [ ] API endpoints responding correctly
+- [ ] No example.com URLs in API responses
+- [ ] PWA loading and functioning
+- [ ] "Read More" buttons working
+- [ ] AI enhancement working (if applicable)
+- [ ] Mobile responsiveness verified
+
+## 📋 **Troubleshooting Guide**
+
+### **Common Issues**
+
+#### **API Not Responding**
+```bash
+# Check Vercel function logs
+# Visit Vercel dashboard for error details
+
+# Test individual RSS feeds
+curl -I https://source-rss-url.com/feed.xml
+
+# Verify environment variables
+# Check Anthropic API key in Vercel settings
+```
+
+#### **PWA Issues**
+```bash
+# Clear browser cache
+# Test in incognito mode
+# Check browser console for errors
+# Verify service worker registration
+```
+
+#### **Deployment Issues**
+```bash
+# Check GitHub repository for push confirmation
+# Verify Vercel deployment status
+# Check build logs in Vercel dashboard
+```
+
+## 🔗 **Important Resources**
+
+### **Live Links**
+- **Application**: https://ai-scraper-playground.vercel.app/
+- **Main API**: https://ai-scraper-playground.vercel.app/api/reports/latest
+- **GitHub**: https://github.com/dumitrudabija/AI_scraper_playground
+
+### **Documentation Files**
+- **CURRENT_PROJECT_STATE.md**: Technical details
+- **README.md**: Project overview
+- **PROJECT_MEMORY_SUMMARY.md**: Development history
+
+### **Development Tools**
+- **Vercel Dashboard**: Deployment and function logs
+- **GitHub Actions**: Auto-deployment status
+- **Browser DevTools**: PWA testing and debugging
+
+## ⚠️ **Important Notes**
+
+### **What NOT to Do**
+- ❌ Don't use example.com URLs in any fallback data
+- ❌ Don't commit sensitive API keys to repository
+- ❌ Don't skip documentation updates
+- ❌ Don't deploy without testing endpoints
+
+### **Best Practices**
+- ✅ Always test API endpoints after deployment
+- ✅ Update documentation with every change
+- ✅ Use descriptive commit messages
+- ✅ Verify PWA functionality on mobile devices
+- ✅ Monitor AI API usage and costs
 
 ---
 
-**This workflow ensures the project memory framework remains the single source of truth and is always current with the actual implementation.**
-
-**Workflow Version**: 1.0  
-**Last Updated**: 2025-06-18 08:08:00 AM (America/Toronto)  
-**Compliance**: Mandatory for all code changes
+**Workflow Status**: ✅ **ESTABLISHED AND TESTED**  
+**Last Verified**: June 27, 2025  
+**Next Review**: As needed for process improvements
