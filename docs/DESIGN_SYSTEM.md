@@ -1,12 +1,17 @@
 # Design System Documentation
 
-**AI News Scraper - Custom CSS Design System**  
-**Version**: 3.0  
+**AI News Scraper - Halo Lab Inspired Design System**  
+**Version**: 4.0 (Halo Lab Inspired)  
 **Last Updated**: June 27, 2025
 
 ## 🎨 **Overview**
 
-The AI News Scraper uses a modern, custom CSS design system built without any build tool dependencies. This approach provides better performance, easier maintenance, and faster development cycles while delivering a professional, responsive user experience.
+The AI News Scraper features a sophisticated design system inspired by Halo Lab's Databest project. This premium design approach combines elegant indigo and red color schemes, sophisticated typography, and smooth animations to create a world-class user experience that rivals high-end design agencies.
+
+### **Design Inspiration**
+- **Source**: Halo Lab's Databest project (https://www.halo-lab.com/projects/databest)
+- **Approach**: Minimalist style with soothing colors, elegant fonts, and generous spacing
+- **Elements**: Round corners, gradient effects, floating animations, and premium shadows
 
 ## 🏗️ **Architecture**
 
