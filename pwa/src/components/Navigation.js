@@ -6,8 +6,7 @@ function Navigation() {
 
   const navItems = [
     { path: '/', icon: '🏠', label: 'Home' },
-    { path: '/reports', icon: '📰', label: 'Reports' },
-    { path: '/settings', icon: '⚙️', label: 'Settings' }
+    { path: '/reports', icon: '📰', label: 'Reports' }
   ];
 
   return (

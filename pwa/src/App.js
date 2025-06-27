@@ -7,7 +7,6 @@ import Header from './components/Header';
 import Navigation from './components/Navigation';
 import HomeScreen from './screens/HomeScreen';
 import ReportsScreen from './screens/ReportsScreen';
-import SettingsScreen from './screens/SettingsScreen';
 import LoadingScreen from './components/LoadingScreen';
 
 // Contexts
@@ -41,7 +40,6 @@ function App() {
               <Routes>
                 <Route path="/" element={<HomeScreen />} />
                 <Route path="/reports" element={<ReportsScreen />} />
-                <Route path="/settings" element={<SettingsScreen />} />
               </Routes>
             </main>
             <Navigation />
