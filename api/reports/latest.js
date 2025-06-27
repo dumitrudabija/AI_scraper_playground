@@ -2,57 +2,85 @@
 async function scrapeAINews() {
   console.log('Scraping AI news sources...');
   
-  // Only include sources that are actually working
-  const allSources = [
+  // RSS sources (working)
+  const rssSources = [
     {
       name: 'ArXiv AI Papers',
       url: 'http://export.arxiv.org/rss/cs.AI',
       color: '#B31B1B',
-      category: 'development'
+      category: 'development',
+      type: 'rss'
     },
     {
       name: 'TechCrunch AI',
       url: 'https://techcrunch.com/category/artificial-intelligence/feed/',
       color: '#00D100',
-      category: 'business'
+      category: 'business',
+      type: 'rss'
     },
     {
       name: 'MIT Technology Review',
       url: 'https://www.technologyreview.com/feed/',
       color: '#A31621',
-      category: 'business'
+      category: 'business',
+      type: 'rss'
     },
     {
       name: 'Wired AI',
       url: 'https://www.wired.com/feed/tag/ai/latest/rss',
       color: '#000000',
-      category: 'business'
+      category: 'business',
+      type: 'rss'
     },
     {
       name: 'Hugging Face Blog',
       url: 'https://huggingface.co/blog/feed.xml',
       color: '#FF9D00',
-      category: 'development'
+      category: 'development',
+      type: 'rss'
     },
     {
       name: 'Google AI Blog',
       url: 'https://blog.google/technology/ai/rss/',
       color: '#4285F4',
-      category: 'business'
+      category: 'business',
+      type: 'rss'
     },
     {
       name: 'AI News',
       url: 'https://artificialintelligence-news.com/feed/',
       color: '#FF5722',
-      category: 'business'
+      category: 'business',
+      type: 'rss'
     },
     {
       name: 'VentureBeat AI',
       url: 'https://venturebeat.com/ai/feed/',
       color: '#1E88E5',
-      category: 'business'
+      category: 'business',
+      type: 'rss'
     }
   ];
+
+  // HTML sources (experimental - may be blocked by anti-bot measures)
+  const htmlSources = [
+    {
+      name: 'OpenAI Blog',
+      url: 'https://openai.com/blog',
+      color: '#00A67E',
+      category: 'business',
+      type: 'html'
+    },
+    {
+      name: 'Anthropic Blog',
+      url: 'https://www.anthropic.com/news',
+      color: '#D4A574',
+      category: 'business',
+      type: 'html'
+    }
+  ];
+
+  const allSources = [...rssSources, ...htmlSources];
 
   // Test and use all available sources - no sample data fallback
   const sources = allSources;
@@ -62,7 +90,14 @@ async function scrapeAINews() {
   for (const source of sources) {
     try {
       console.log(`Scraping ${source.name}...`);
-      const sourceArticles = await scrapeRSSFeed(source);
+      let sourceArticles = [];
+      
+      if (source.type === 'html') {
+        sourceArticles = await scrapeHTMLSource(source);
+      } else {
+        sourceArticles = await scrapeRSSFeed(source);
+      }
+      
       articles.push(...sourceArticles);
       console.log(`Found ${sourceArticles.length} articles from ${source.name}`);
     } catch (error) {
@@ -100,6 +135,107 @@ async function scrapeRSSFeed(source) {
     console.error(`Failed to scrape ${source.name}:`, error.message);
     return [];
   }
+}
+
+async function scrapeHTMLSource(source) {
+  try {
+    const response = await fetch(source.url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; AI-News-Scraper/1.0)'
+      },
+      timeout: 10000
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const htmlText = await response.text();
+    
+    if (source.name === 'OpenAI Blog') {
+      return parseOpenAIBlog(htmlText, source);
+    } else if (source.name === 'Anthropic Blog') {
+      return parseAnthropicBlog(htmlText, source);
+    }
+    
+    return [];
+    
+  } catch (error) {
+    console.error(`Failed to scrape ${source.name}:`, error.message);
+    return [];
+  }
+}
+
+function parseOpenAIBlog(htmlText, source) {
+  const articles = [];
+  
+  try {
+    // Look for blog post patterns in OpenAI's HTML structure
+    const postRegex = /<article[^>]*>[\s\S]*?<\/article>/gi;
+    const posts = htmlText.match(postRegex) || [];
+    
+    for (const post of posts.slice(0, 3)) {
+      const titleMatch = post.match(/<h[1-6][^>]*>([^<]+)<\/h[1-6]>/i);
+      const linkMatch = post.match(/href="([^"]*\/blog\/[^"]*)"/) || post.match(/href="([^"]*)".*?blog/);
+      const dateMatch = post.match(/(\d{4}-\d{2}-\d{2})|(\w+ \d{1,2}, \d{4})/);
+      
+      if (titleMatch && linkMatch) {
+        const title = cleanText(titleMatch[1]);
+        const link = linkMatch[1].startsWith('http') ? linkMatch[1] : `https://openai.com${linkMatch[1]}`;
+        const description = `Latest update from OpenAI: ${title}`;
+        
+        articles.push({
+          source: source.name,
+          source_color: source.color,
+          title: title,
+          link: link,
+          description: description,
+          pub_date: dateMatch ? new Date(dateMatch[0]).toISOString() : new Date().toISOString(),
+          category: source.category
+        });
+      }
+    }
+  } catch (error) {
+    console.error(`Error parsing OpenAI blog:`, error.message);
+  }
+  
+  return articles;
+}
+
+function parseAnthropicBlog(htmlText, source) {
+  const articles = [];
+  
+  try {
+    // Look for blog post patterns in Anthropic's HTML structure
+    const postRegex = /<article[^>]*>[\s\S]*?<\/article>/gi;
+    const posts = htmlText.match(postRegex) || [];
+    
+    for (const post of posts.slice(0, 3)) {
+      const titleMatch = post.match(/<h[1-6][^>]*>([^<]+)<\/h[1-6]>/i);
+      const linkMatch = post.match(/href="([^"]*\/news\/[^"]*)"/) || post.match(/href="([^"]*)".*?news/);
+      const dateMatch = post.match(/(\d{4}-\d{2}-\d{2})|(\w+ \d{1,2}, \d{4})/);
+      
+      if (titleMatch && linkMatch) {
+        const title = cleanText(titleMatch[1]);
+        const link = linkMatch[1].startsWith('http') ? linkMatch[1] : `https://www.anthropic.com${linkMatch[1]}`;
+        const description = `Latest research from Anthropic: ${title}`;
+        
+        articles.push({
+          source: source.name,
+          source_color: source.color,
+          title: title,
+          link: link,
+          description: description,
+          pub_date: dateMatch ? new Date(dateMatch[0]).toISOString() : new Date().toISOString(),
+          category: source.category
+        });
+      }
+    }
+  } catch (error) {
+    console.error(`Error parsing Anthropic blog:`, error.message);
+  }
+  
+  return articles;
 }
 
 function parseRSSFeed(xmlText, source) {
@@ -338,15 +474,15 @@ async function generateAISummary(article, apiKey) {
       },
       body: JSON.stringify({
         model: 'claude-3-haiku-20240307',
-        max_tokens: 150,
+        max_tokens: 300,
         messages: [{
           role: 'user',
-          content: `Create a very short, catchy phrase (5-8 words max) that captures the essence of this AI news:
+          content: `Create a concise, engaging paragraph (2-3 sentences, 50-80 words) that summarizes this AI news article. Focus on the key innovation, impact, or development. Write in an informative but accessible tone.
 
 Title: ${article.title}
 Description: ${article.description}
 
-Return only the phrase, nothing else. Examples: "New AI model beats GPT-4", "Meta acquires voice AI startup", "AI safety breakthrough announced"`
+Return only the paragraph summary, nothing else.`
         }]
       })
     });
