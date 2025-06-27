@@ -15,6 +15,7 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { ApiProvider } from './contexts/ApiContext';
 
 function App() {
+  // Force deployment refresh - v2.1
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
