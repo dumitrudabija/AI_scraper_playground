@@ -72,15 +72,13 @@ async function scrapeAINews() {
     }
   ];
 
-  // Default enabled sources (matching settings screen defaults)
-  const defaultEnabledSources = [
-    'OpenAI Blog', 'Anthropic Blog', 'Google AI Blog', 'ArXiv AI Papers',
-    'Hugging Face Blog', 'GitHub AI Trending', 'TechCrunch AI', 'VentureBeat AI', 'Hacker News'
-    // Note: r/MachineLearning and r/LocalLLaMA are disabled by default in settings
+  // Use only reliable, fast sources to avoid timeouts
+  const reliableSources = [
+    'TechCrunch AI', 'VentureBeat AI', 'Hacker News'
   ];
 
-  // Filter sources based on enabled list (for now use defaults, later we'll make this dynamic)
-  const sources = allSources.filter(source => defaultEnabledSources.includes(source.name));
+  // Filter sources based on reliable list to avoid timeouts
+  const sources = allSources.filter(source => reliableSources.includes(source.name));
 
   const articles = [];
   
