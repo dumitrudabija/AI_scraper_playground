@@ -52,24 +52,6 @@ async function scrapeAINews() {
   
   const sources = [
     {
-      name: 'OpenAI Blog',
-      url: 'https://openai.com/blog/rss.xml',
-      color: '#00A67E',
-      category: 'business'
-    },
-    {
-      name: 'Anthropic Blog', 
-      url: 'https://www.anthropic.com/news/rss.xml',
-      color: '#D4A574',
-      category: 'business'
-    },
-    {
-      name: 'Google AI Blog',
-      url: 'https://ai.googleblog.com/feeds/posts/default',
-      color: '#4285F4', 
-      category: 'development'
-    },
-    {
       name: 'TechCrunch AI',
       url: 'https://techcrunch.com/category/artificial-intelligence/feed/',
       color: '#00D100',
@@ -79,6 +61,24 @@ async function scrapeAINews() {
       name: 'VentureBeat AI',
       url: 'https://venturebeat.com/ai/feed/',
       color: '#1E88E5',
+      category: 'business'
+    },
+    {
+      name: 'MIT Technology Review',
+      url: 'https://www.technologyreview.com/feed/',
+      color: '#FF6B6B',
+      category: 'development'
+    },
+    {
+      name: 'AI News',
+      url: 'https://artificialintelligence-news.com/feed/',
+      color: '#4ECDC4',
+      category: 'business'
+    },
+    {
+      name: 'The Verge AI',
+      url: 'https://www.theverge.com/ai-artificial-intelligence/rss/index.xml',
+      color: '#FA7268',
       category: 'business'
     }
   ];
