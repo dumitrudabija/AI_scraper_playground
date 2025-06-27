@@ -11,69 +11,39 @@ function HomeScreen() {
 
   const [latestNews, setLatestNews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const reportData = await getLatestReport();
+  const fetchData = async () => {
+    try {
+      setRefreshing(true);
+      const reportData = await getLatestReport();
+      
+      if (reportData && reportData.data && reportData.data.articles) {
+        const data = reportData.data;
+        // Update stats from API data
+        setStats({
+          totalArticles: data.articles.length,
+          sources: data.sources_count || data.sources?.length || 5,
+          lastUpdated: data.generated_at ? 
+            new Date(data.generated_at).toLocaleString() : 
+            'Today at 5:00 AM'
+        });
         
-        if (reportData && reportData.data && reportData.data.articles) {
-          const data = reportData.data;
-          // Update stats from API data
-          setStats({
-            totalArticles: data.articles.length,
-            sources: data.stats?.source_counts ? Object.keys(data.stats.source_counts).length : 6,
-            lastUpdated: data.generated_at ? 
-              new Date(data.generated_at).toLocaleString() : 
-              'Today at 5:00 AM'
-          });
-          
-          // Get first 3 articles for latest news
-          const latestArticles = data.articles.slice(0, 3).map((article, index) => ({
-            id: index + 1,
-            title: article.title,
-            source: article.source,
-            time: article.published_time || 'Recently',
-            description: article.description || article.summary || 'No description available',
-            link: article.link
-          }));
-          
-          setLatestNews(latestArticles);
-        } else {
-          // Fallback to mock data if API fails
-          setStats({
-            totalArticles: 42,
-            sources: 11,
-            lastUpdated: 'Today at 5:00 AM'
-          });
-          
-          setLatestNews([
-            {
-              id: 1,
-              title: 'OpenAI Announces New GPT Model',
-              source: 'OpenAI Blog',
-              time: '2 hours ago',
-              description: 'Latest developments in AI language models...'
-            },
-            {
-              id: 2,
-              title: 'Anthropic Releases Claude 3.5 Sonnet',
-              source: 'Anthropic Blog',
-              time: '4 hours ago',
-              description: 'Enhanced reasoning capabilities and performance...'
-            },
-            {
-              id: 3,
-              title: 'Google AI Research Breakthrough',
-              source: 'Google AI Blog',
-              time: '6 hours ago',
-              description: 'New advances in machine learning efficiency...'
-            }
-          ]);
-        }
-      } catch (err) {
-        console.error('Failed to fetch latest report:', err);
-        // Use fallback mock data on error
+        // Get first 3 articles for latest news
+        const latestArticles = data.articles.slice(0, 3).map((article, index) => ({
+          id: index + 1,
+          title: article.title,
+          source: article.source,
+          time: article.pub_date ? 
+            new Date(article.pub_date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 
+            'Recently',
+          description: article.description || 'No description available',
+          link: article.link
+        }));
+        
+        setLatestNews(latestArticles);
+      } else {
+        // Fallback to mock data if API fails
         setStats({
           totalArticles: 42,
           sources: 11,
@@ -86,16 +56,65 @@ function HomeScreen() {
             title: 'OpenAI Announces New GPT Model',
             source: 'OpenAI Blog',
             time: '2 hours ago',
-            description: 'Latest developments in AI language models...'
+            description: 'Latest developments in AI language models...',
+            link: 'https://openai.com'
+          },
+          {
+            id: 2,
+            title: 'Anthropic Releases Claude 3.5 Sonnet',
+            source: 'Anthropic Blog',
+            time: '4 hours ago',
+            description: 'Enhanced reasoning capabilities and performance...',
+            link: 'https://anthropic.com'
+          },
+          {
+            id: 3,
+            title: 'Google AI Research Breakthrough',
+            source: 'Google AI Blog',
+            time: '6 hours ago',
+            description: 'New advances in machine learning efficiency...',
+            link: 'https://ai.googleblog.com'
           }
         ]);
-      } finally {
-        setLoading(false);
       }
-    };
+    } catch (err) {
+      console.error('Failed to fetch latest report:', err);
+      // Use fallback mock data on error
+      setStats({
+        totalArticles: 42,
+        sources: 11,
+        lastUpdated: 'Today at 5:00 AM'
+      });
+      
+      setLatestNews([
+        {
+          id: 1,
+          title: 'OpenAI Announces New GPT Model',
+          source: 'OpenAI Blog',
+          time: '2 hours ago',
+          description: 'Latest developments in AI language models...',
+          link: 'https://openai.com'
+        }
+      ]);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
 
+  const handleRefresh = async () => {
+    await fetchData();
+  };
+
+  const handleReadMore = (link) => {
+    if (link && link !== '#') {
+      window.open(link, '_blank', 'noopener,noreferrer');
+    }
+  };
+
+  useEffect(() => {
     fetchData();
-  }, [getLatestReport]);
+  }, []);
 
   if (loading) {
     return (
@@ -143,7 +162,12 @@ function HomeScreen() {
             <h3 className="article-title">{article.title}</h3>
             <p className="article-description">{article.description}</p>
             <div className="article-actions">
-              <button className="btn btn-small">Read More</button>
+              <button 
+                className="btn btn-small"
+                onClick={() => handleReadMore(article.link)}
+              >
+                Read More
+              </button>
             </div>
           </div>
         ))}
@@ -154,7 +178,13 @@ function HomeScreen() {
           <h2 className="card-title">🚀 Quick Actions</h2>
         </div>
         <div className="flex flex-wrap" style={{ gap: '1rem' }}>
-          <button className="btn">🔄 Refresh News</button>
+          <button 
+            className="btn"
+            onClick={handleRefresh}
+            disabled={refreshing}
+          >
+            {refreshing ? '🔄 Refreshing...' : '🔄 Refresh News'}
+          </button>
           <button className="btn btn-secondary">📰 View All Reports</button>
         </div>
       </div>

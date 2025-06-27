@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useTheme } from '../contexts/ThemeContext';
 
 function Header() {
-  const handleRefresh = () => {
-    // TODO: Implement refresh functionality
-    console.log('Refresh triggered');
-  };
+  const { theme, toggleTheme } = useTheme();
+  const [refreshing, setRefreshing] = useState(false);
 
-  const toggleTheme = () => {
-    // TODO: Implement theme toggle
-    console.log('Theme toggle triggered');
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    try {
+      // Trigger a page reload to refresh all data
+      window.location.reload();
+    } catch (error) {
+      console.error('Refresh failed:', error);
+    } finally {
+      setRefreshing(false);
+    }
   };
 
   return (
@@ -19,15 +25,16 @@ function Header() {
           className="header-button" 
           onClick={handleRefresh}
           title="Refresh News"
+          disabled={refreshing}
         >
-          🔄
+          {refreshing ? '⏳' : '🔄'}
         </button>
         <button 
           className="header-button" 
           onClick={toggleTheme}
           title="Toggle Theme"
         >
-          🌙
+          {theme === 'dark' ? '☀️' : '🌙'}
         </button>
       </div>
     </header>
