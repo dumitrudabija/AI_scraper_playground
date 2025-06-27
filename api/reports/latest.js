@@ -2,26 +2,8 @@
 async function scrapeAINews() {
   console.log('Scraping AI news sources...');
   
-  // Complete source list matching the settings screen
+  // Only include sources that are actually working
   const allSources = [
-    {
-      name: 'OpenAI Blog',
-      url: 'https://openai.com/blog/rss.xml',
-      color: '#00A67E',
-      category: 'business'
-    },
-    {
-      name: 'Anthropic Blog',
-      url: 'https://www.anthropic.com/news/rss.xml',
-      color: '#D4A574',
-      category: 'business'
-    },
-    {
-      name: 'Google AI Blog',
-      url: 'https://ai.googleblog.com/feeds/posts/default',
-      color: '#4285F4',
-      category: 'development'
-    },
     {
       name: 'ArXiv AI Papers',
       url: 'http://export.arxiv.org/rss/cs.AI',
@@ -29,34 +11,10 @@ async function scrapeAINews() {
       category: 'development'
     },
     {
-      name: 'GitHub AI Trending',
-      url: 'https://github.com/trending/machine-learning.atom',
-      color: '#24292e',
-      category: 'development'
-    },
-    {
       name: 'TechCrunch AI',
       url: 'https://techcrunch.com/category/artificial-intelligence/feed/',
       color: '#00D100',
       category: 'business'
-    },
-    {
-      name: 'Hacker News',
-      url: 'https://hnrss.org/newest?q=AI+OR+artificial+intelligence+OR+machine+learning',
-      color: '#FF6600',
-      category: 'business'
-    },
-    {
-      name: 'r/MachineLearning',
-      url: 'https://www.reddit.com/r/MachineLearning/.rss',
-      color: '#FF4500',
-      category: 'development'
-    },
-    {
-      name: 'r/LocalLLaMA',
-      url: 'https://www.reddit.com/r/LocalLLaMA/.rss',
-      color: '#FF4500',
-      category: 'development'
     },
     {
       name: 'MIT Technology Review',
@@ -77,27 +35,21 @@ async function scrapeAINews() {
       category: 'development'
     },
     {
-      name: 'The Gradient',
-      url: 'https://thegradient.pub/rss/',
-      color: '#6B46C1',
-      category: 'development'
-    },
-    {
       name: 'Google AI Blog',
       url: 'https://blog.google/technology/ai/rss/',
       color: '#4285F4',
       category: 'business'
     },
     {
-      name: 'VentureBeat AI',
-      url: 'https://venturebeat.com/ai/feed/',
-      color: '#1E88E5',
-      category: 'business'
-    },
-    {
       name: 'AI News',
       url: 'https://artificialintelligence-news.com/feed/',
       color: '#FF5722',
+      category: 'business'
+    },
+    {
+      name: 'VentureBeat AI',
+      url: 'https://venturebeat.com/ai/feed/',
+      color: '#1E88E5',
       category: 'business'
     }
   ];
@@ -242,62 +194,6 @@ function generateSampleArticles() {
   const now = new Date();
   const sampleArticles = [
     {
-      source: 'OpenAI Blog',
-      color: '#00A67E',
-      category: 'business',
-      title: 'New AI Model Achieves Breakthrough in Natural Language Understanding',
-      link: 'https://openai.com/blog',
-      description: 'Latest developments in AI technology and research. This article covers recent advances and their implications for the future of artificial intelligence.'
-    },
-    {
-      source: 'Anthropic Blog',
-      color: '#D4A574',
-      category: 'business',
-      title: 'Machine Learning Advances in Computer Vision Applications',
-      link: 'https://www.anthropic.com/news',
-      description: 'Exploring new frontiers in computer vision and machine learning applications across various industries.'
-    },
-    {
-      source: 'Google AI Blog',
-      color: '#4285F4',
-      category: 'development',
-      title: 'AI Safety Research: Latest Developments and Challenges',
-      link: 'https://ai.googleblog.com/',
-      description: 'Comprehensive overview of current AI safety research initiatives and emerging challenges in the field.'
-    },
-    {
-      source: 'TechCrunch AI',
-      color: '#00D100',
-      category: 'business',
-      title: 'Large Language Models: Performance and Efficiency Improvements',
-      link: 'https://techcrunch.com/category/artificial-intelligence/',
-      description: 'Analysis of recent improvements in large language model performance and computational efficiency.'
-    },
-    {
-      source: 'VentureBeat AI',
-      color: '#1E88E5',
-      category: 'business',
-      title: 'AI in Healthcare: Revolutionary Applications and Case Studies',
-      link: 'https://venturebeat.com/ai/',
-      description: 'Examining transformative AI applications in healthcare with real-world case studies and outcomes.'
-    },
-    {
-      source: 'Hacker News',
-      color: '#FF6600',
-      category: 'business',
-      title: 'Robotics and AI Integration: Future Possibilities',
-      link: 'https://news.ycombinator.com/',
-      description: 'Exploring the convergence of robotics and artificial intelligence for next-generation applications.'
-    },
-    {
-      source: 'r/MachineLearning',
-      color: '#FF4500',
-      category: 'development',
-      title: 'Neural Network Architecture Innovations',
-      link: 'https://www.reddit.com/r/MachineLearning/',
-      description: 'Deep dive into cutting-edge neural network architectures and their practical applications.'
-    },
-    {
       source: 'ArXiv AI Papers',
       color: '#B31B1B',
       category: 'development',
@@ -306,20 +202,12 @@ function generateSampleArticles() {
       description: 'Guidelines and best practices for ethical AI development and deployment in enterprise environments.'
     },
     {
-      source: 'Hugging Face Blog',
-      color: '#FF9D00',
-      category: 'development',
-      title: 'Automated Code Generation: Tools and Techniques',
-      link: 'https://huggingface.co/blog',
-      description: 'Overview of automated code generation tools and their impact on software development workflows.'
-    },
-    {
-      source: 'GitHub AI Trending',
-      color: '#24292e',
-      category: 'development',
-      title: 'AI-Powered Data Analysis: New Methodologies',
-      link: 'https://github.com/trending',
-      description: 'Revolutionary approaches to data analysis powered by artificial intelligence and machine learning.'
+      source: 'TechCrunch AI',
+      color: '#00D100',
+      category: 'business',
+      title: 'Large Language Models: Performance and Efficiency Improvements',
+      link: 'https://techcrunch.com/category/artificial-intelligence/',
+      description: 'Analysis of recent improvements in large language model performance and computational efficiency.'
     },
     {
       source: 'MIT Technology Review',
@@ -338,12 +226,36 @@ function generateSampleArticles() {
       description: 'In-depth exploration of emerging AI trends and expert predictions for the future of artificial intelligence.'
     },
     {
-      source: 'The Gradient',
-      color: '#6B46C1',
+      source: 'Hugging Face Blog',
+      color: '#FF9D00',
       category: 'development',
-      title: 'Deep Learning Research: Architectural Innovations and Breakthroughs',
-      link: 'https://thegradient.pub/',
-      description: 'Comprehensive analysis of cutting-edge deep learning research, architectural innovations, and their implications for AI development.'
+      title: 'Automated Code Generation: Tools and Techniques',
+      link: 'https://huggingface.co/blog',
+      description: 'Overview of automated code generation tools and their impact on software development workflows.'
+    },
+    {
+      source: 'Google AI Blog',
+      color: '#4285F4',
+      category: 'business',
+      title: 'AI Safety Research: Latest Developments and Challenges',
+      link: 'https://blog.google/technology/ai/',
+      description: 'Comprehensive overview of current AI safety research initiatives and emerging challenges in the field.'
+    },
+    {
+      source: 'AI News',
+      color: '#FF5722',
+      category: 'business',
+      title: 'AI Industry Trends and Market Analysis',
+      link: 'https://artificialintelligence-news.com/',
+      description: 'Latest trends and market analysis in the artificial intelligence industry.'
+    },
+    {
+      source: 'VentureBeat AI',
+      color: '#1E88E5',
+      category: 'business',
+      title: 'AI in Healthcare: Revolutionary Applications and Case Studies',
+      link: 'https://venturebeat.com/ai/',
+      description: 'Examining transformative AI applications in healthcare with real-world case studies and outcomes.'
     }
   ];
 
