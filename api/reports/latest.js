@@ -138,27 +138,34 @@ function parseRSSFeed(xmlText, source) {
       let description = extractXMLTag(item, 'description');
       const pubDate = extractXMLTag(item, 'pubDate');
       
-      // Skip articles with empty or URL-like titles
-      if (!title || title.trim() === '' || title.startsWith('http')) {
+      // Clean the title and description first
+      title = cleanText(title);
+      description = cleanText(description);
+      
+      // Skip articles with empty, short, or URL-like titles
+      if (!title || title.trim() === '' || title.length < 10 || title.startsWith('http')) {
         continue;
       }
       
-      // Skip articles with no description either
-      if (!description || description.trim() === '') {
+      // Skip articles with no meaningful description
+      if (!description || description.trim() === '' || description.length < 20) {
         continue;
       }
       
-      if (title && link && title.trim() !== '') {
-        articles.push({
-          source: source.name,
-          source_color: source.color,
-          title: cleanText(title),
-          link: link.trim(),
-          description: cleanText(description).substring(0, 200),
-          pub_date: parsePubDate(pubDate),
-          category: source.category
-        });
+      // Skip if title looks like a URL path or is just punctuation
+      if (title.includes('/') || title.match(/^[^a-zA-Z]*$/)) {
+        continue;
       }
+      
+      articles.push({
+        source: source.name,
+        source_color: source.color,
+        title: title,
+        link: link.trim(),
+        description: description.substring(0, 200),
+        pub_date: parsePubDate(pubDate),
+        category: source.category
+      });
     }
   } catch (error) {
     console.error(`Error parsing RSS for ${source.name}:`, error.message);
