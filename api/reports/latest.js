@@ -133,12 +133,26 @@ function parseRSSFeed(xmlText, source) {
     const items = xmlText.match(itemRegex) || [];
     
     for (const item of items.slice(0, 5)) {
-      const title = extractXMLTag(item, 'title');
+      let title = extractXMLTag(item, 'title');
       const link = extractXMLTag(item, 'link');
-      const description = extractXMLTag(item, 'description');
+      let description = extractXMLTag(item, 'description');
       const pubDate = extractXMLTag(item, 'pubDate');
       
-      if (title && link) {
+      // For Hacker News, extract title from description if title is empty
+      if (source.name === 'Hacker News' && (!title || title.trim() === '')) {
+        const urlMatch = description.match(/Article URL: ([^\s]+)/);
+        if (urlMatch) {
+          // Try to extract a meaningful title from the URL
+          const url = urlMatch[1];
+          const pathParts = url.split('/').filter(part => part && part !== 'www');
+          title = pathParts[pathParts.length - 1]
+            .replace(/[-_]/g, ' ')
+            .replace(/\.(html|php|aspx?)$/i, '')
+            .replace(/\b\w/g, l => l.toUpperCase());
+        }
+      }
+      
+      if (title && link && title.trim() !== '') {
         articles.push({
           source: source.name,
           source_color: source.color,
