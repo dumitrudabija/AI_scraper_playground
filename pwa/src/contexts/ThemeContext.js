@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useApi } from './ApiContext';
 
 const ThemeContext = createContext();
 
@@ -7,7 +6,6 @@ export function ThemeProvider({ children }) {
   const [isDarkMode, setIsDarkMode] = useState(true); // Default to dark mode
   const [currentScreen, setCurrentScreen] = useState('home');
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const { getLatestReport } = useApi();
 
   useEffect(() => {
     // Check for saved theme preference, default to dark
@@ -44,8 +42,7 @@ export function ThemeProvider({ children }) {
     
     setIsRefreshing(true);
     try {
-      await getLatestReport();
-      // Force a page refresh to show new data
+      // Simple refresh without API dependency
       window.location.reload();
     } catch (error) {
       console.error('Failed to refresh data:', error);
