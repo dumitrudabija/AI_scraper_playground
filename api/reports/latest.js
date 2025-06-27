@@ -160,9 +160,9 @@ function parseRSSFeed(xmlText, source) {
         continue;
       }
       
-      // Skip articles with no meaningful description
+      // For feeds without descriptions, use title as description
       if (!description || description.trim() === '' || description.length < 20) {
-        continue;
+        description = title.length > 50 ? title.substring(0, 100) + '...' : title;
       }
       
       // Skip if title looks like a URL path or is just punctuation

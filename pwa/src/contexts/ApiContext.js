@@ -14,9 +14,9 @@ export const ApiProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // API base URL - will be localhost during development
+  // API base URL - use full Vercel URL in production
   const API_BASE_URL = process.env.NODE_ENV === 'production' 
-    ? '/api' 
+    ? 'https://ai-scraper-playground.vercel.app/api' 
     : 'http://localhost:3000/api';
 
   const apiCall = useCallback(async (endpoint, options = {}) => {
