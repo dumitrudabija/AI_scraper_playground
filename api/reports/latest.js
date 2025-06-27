@@ -41,12 +41,6 @@ async function scrapeAINews() {
       category: 'business'
     },
     {
-      name: 'VentureBeat AI',
-      url: 'https://venturebeat.com/ai/feed/',
-      color: '#1E88E5',
-      category: 'business'
-    },
-    {
       name: 'Hacker News',
       url: 'https://hnrss.org/newest?q=AI+OR+artificial+intelligence+OR+machine+learning',
       color: '#FF6600',
@@ -87,6 +81,24 @@ async function scrapeAINews() {
       url: 'https://thegradient.pub/rss/',
       color: '#6B46C1',
       category: 'development'
+    },
+    {
+      name: 'Google AI Blog',
+      url: 'https://blog.google/technology/ai/rss/',
+      color: '#4285F4',
+      category: 'business'
+    },
+    {
+      name: 'VentureBeat AI',
+      url: 'https://venturebeat.com/ai/feed/',
+      color: '#1E88E5',
+      category: 'business'
+    },
+    {
+      name: 'AI News',
+      url: 'https://artificialintelligence-news.com/feed/',
+      color: '#FF5722',
+      category: 'business'
     }
   ];
 
