@@ -1,45 +1,66 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useApi } from './ApiContext';
 
 const ThemeContext = createContext();
 
-export const useTheme = () => {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
-  }
-  return context;
-};
-
-export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState('light');
+export function ThemeProvider({ children }) {
+  const [isDarkMode, setIsDarkMode] = useState(true); // Default to dark mode
+  const [currentScreen, setCurrentScreen] = useState('home');
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const { getLatestReport } = useApi();
 
   useEffect(() => {
-    // Load theme from localStorage
-    const savedTheme = localStorage.getItem('ai-news-theme');
+    // Check for saved theme preference, default to dark
+    const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
-      setTheme(savedTheme);
+      const isDark = savedTheme === 'dark';
+      setIsDarkMode(isDark);
+      updateDocumentTheme(isDark);
     } else {
-      // Check system preference
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(prefersDark ? 'dark' : 'light');
+      // Default to dark mode
+      setIsDarkMode(true);
+      updateDocumentTheme(true);
+      localStorage.setItem('theme', 'dark');
     }
   }, []);
 
-  useEffect(() => {
-    // Apply theme to document
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('ai-news-theme', theme);
-  }, [theme]);
+  const updateDocumentTheme = (isDark) => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  };
 
   const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+    const newTheme = !isDarkMode;
+    setIsDarkMode(newTheme);
+    updateDocumentTheme(newTheme);
+    localStorage.setItem('theme', newTheme ? 'dark' : 'light');
+  };
+
+  const refreshData = async () => {
+    if (isRefreshing) return;
+    
+    setIsRefreshing(true);
+    try {
+      await getLatestReport();
+      // Force a page refresh to show new data
+      window.location.reload();
+    } catch (error) {
+      console.error('Failed to refresh data:', error);
+    } finally {
+      setIsRefreshing(false);
+    }
   };
 
   const value = {
-    theme,
-    setTheme,
+    isDarkMode,
     toggleTheme,
-    isDark: theme === 'dark'
+    currentScreen,
+    setCurrentScreen,
+    refreshData,
+    isRefreshing
   };
 
   return (
@@ -47,4 +68,12 @@ export const ThemeProvider = ({ children }) => {
       {children}
     </ThemeContext.Provider>
   );
-};
+}
+
+export function useTheme() {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error('useTheme must be used within a ThemeProvider');
+  }
+  return context;
+}
