@@ -28,9 +28,15 @@ async function scrapeAINews() {
       category: 'business'
     },
     {
-      name: 'The Verge AI',
-      url: 'https://www.theverge.com/ai-artificial-intelligence/rss/index.xml',
-      color: '#FA7268',
+      name: 'Ars Technica AI',
+      url: 'https://feeds.arstechnica.com/arstechnica/technology-lab',
+      color: '#FF4500',
+      category: 'development'
+    },
+    {
+      name: 'Wired AI',
+      url: 'https://www.wired.com/feed/tag/ai/latest/rss',
+      color: '#000000',
       category: 'business'
     }
   ];
@@ -191,6 +197,96 @@ function generateSampleArticles() {
   });
 }
 
+async function enhanceWithAI(articles) {
+  const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+  
+  if (!ANTHROPIC_API_KEY) {
+    console.log('No Anthropic API key found, skipping AI enhancement');
+    return articles;
+  }
+
+  try {
+    console.log('🤖 Enhancing articles with AI summaries...');
+    
+    // Process articles in batches to avoid rate limits
+    const enhancedArticles = [];
+    const batchSize = 5;
+    
+    for (let i = 0; i < Math.min(articles.length, 15); i += batchSize) {
+      const batch = articles.slice(i, i + batchSize);
+      
+      for (const article of batch) {
+        try {
+          const summary = await generateAISummary(article, ANTHROPIC_API_KEY);
+          enhancedArticles.push({
+            ...article,
+            ai_summary: summary,
+            description: summary || article.description
+          });
+        } catch (error) {
+          console.error(`Failed to enhance article: ${article.title}`, error.message);
+          enhancedArticles.push(article); // Keep original if AI fails
+        }
+      }
+      
+      // Small delay between batches
+      if (i + batchSize < articles.length) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+    }
+    
+    // Add remaining articles without AI enhancement if we hit the limit
+    if (articles.length > 15) {
+      enhancedArticles.push(...articles.slice(15));
+    }
+    
+    console.log(`✅ Enhanced ${enhancedArticles.filter(a => a.ai_summary).length} articles with AI summaries`);
+    return enhancedArticles;
+    
+  } catch (error) {
+    console.error('Error in AI enhancement:', error);
+    return articles; // Return original articles if AI fails
+  }
+}
+
+async function generateAISummary(article, apiKey) {
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-3-haiku-20240307',
+        max_tokens: 150,
+        messages: [{
+          role: 'user',
+          content: `Please create a concise, engaging summary (2-3 sentences, max 150 words) for this AI news article:
+
+Title: ${article.title}
+Description: ${article.description}
+Source: ${article.source}
+
+Focus on the key AI development, its significance, and potential impact. Make it informative yet accessible.`
+        }]
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Anthropic API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.content[0].text.trim();
+    
+  } catch (error) {
+    console.error('Failed to generate AI summary:', error);
+    return null;
+  }
+}
+
 export default async function handler(req, res) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -211,7 +307,10 @@ export default async function handler(req, res) {
     console.log('🔄 Generating fresh AI news report...');
     
     // Generate fresh data directly (no file system dependency)
-    const articles = await scrapeAINews();
+    const rawArticles = await scrapeAINews();
+    
+    // Enhance articles with AI summaries
+    const articles = await enhanceWithAI(rawArticles);
     
     // Calculate source statistics
     const sourceStats = {};
@@ -230,10 +329,11 @@ export default async function handler(req, res) {
       total_articles: articles.length,
       sources_count: new Set(articles.map(a => a.source)).size,
       articles: articles,
-      sources: Object.values(sourceStats)
+      sources: Object.values(sourceStats),
+      ai_enhanced: articles.filter(a => a.ai_summary).length
     };
     
-    console.log(`✅ Generated report with ${articles.length} articles from ${reportData.sources_count} sources`);
+    console.log(`✅ Generated report with ${articles.length} articles from ${reportData.sources_count} sources (${reportData.ai_enhanced} AI-enhanced)`);
     
     res.json({
       success: true,

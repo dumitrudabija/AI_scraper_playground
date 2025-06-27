@@ -29,8 +29,8 @@ function HomeScreen() {
             'Today at 5:00 AM'
         });
         
-        // Get first 3 articles for latest news
-        const latestArticles = data.articles.slice(0, 3).map((article, index) => ({
+        // Get first 10 articles for latest news
+        const latestArticles = data.articles.slice(0, 10).map((article, index) => ({
           id: index + 1,
           title: article.title,
           source: article.source,
