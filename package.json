@@ -1,7 +1,7 @@
 {
   "name": "ai-news-scraper",
-  "version": "1.0.0",
-  "description": "AI News Scraper PWA with daily automated news collection from 11+ sources",
+  "version": "2.0.0",
+  "description": "AI News Scraper PWA with real-time RSS scraping from 11 AI news sources and Claude-powered summaries",
   "main": "index.js",
   "scripts": {
     "build": "cd pwa && npm run build",

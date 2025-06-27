@@ -1,6 +1,7 @@
 # AI News Scraper - Current Project State
 
 **Status**: ✅ **PRODUCTION READY - REAL DATA FLOWING**  
+**Version**: 2.0  
 **Last Updated**: June 27, 2025  
 **Deployment**: https://ai-scraper-playground.vercel.app/
 

@@ -1,6 +1,7 @@
 # AI News Scraper
 
 **Status**: ✅ **PRODUCTION READY - REAL DATA FLOWING**  
+**Version**: 2.0  
 **Live App**: https://ai-scraper-playground.vercel.app/  
 **Last Updated**: June 27, 2025
 
