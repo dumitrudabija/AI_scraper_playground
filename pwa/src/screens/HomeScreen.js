@@ -26,7 +26,8 @@ function HomeScreen() {
           sources: data.sources_count || data.sources?.length || 5,
           lastUpdated: data.generated_at ? 
             new Date(data.generated_at).toLocaleString() : 
-            'Today at 5:00 AM'
+            'Today at 5:00 AM',
+          sourcesList: data.sources || []
         });
         
         // Get first 10 articles for latest news
@@ -43,59 +44,18 @@ function HomeScreen() {
         
         setLatestNews(latestArticles);
       } else {
-        // Fallback to mock data if API fails
-        setStats({
-          totalArticles: 42,
-          sources: 11,
-          lastUpdated: 'Today at 5:00 AM'
-        });
-        
-        setLatestNews([
-          {
-            id: 1,
-            title: 'OpenAI Announces New GPT Model',
-            source: 'OpenAI Blog',
-            time: '2 hours ago',
-            description: 'Latest developments in AI language models...',
-            link: 'https://openai.com'
-          },
-          {
-            id: 2,
-            title: 'Anthropic Releases Claude 3.5 Sonnet',
-            source: 'Anthropic Blog',
-            time: '4 hours ago',
-            description: 'Enhanced reasoning capabilities and performance...',
-            link: 'https://anthropic.com'
-          },
-          {
-            id: 3,
-            title: 'Google AI Research Breakthrough',
-            source: 'Google AI Blog',
-            time: '6 hours ago',
-            description: 'New advances in machine learning efficiency...',
-            link: 'https://ai.googleblog.com'
-          }
-        ]);
+        throw new Error('No data received from API');
       }
     } catch (err) {
       console.error('Failed to fetch latest report:', err);
-      // Use fallback mock data on error
+      // Show error state - no fallback data
       setStats({
-        totalArticles: 42,
-        sources: 11,
-        lastUpdated: 'Today at 5:00 AM'
+        totalArticles: 0,
+        sources: 0,
+        lastUpdated: 'Error loading data'
       });
       
-      setLatestNews([
-        {
-          id: 1,
-          title: 'OpenAI Announces New GPT Model',
-          source: 'OpenAI Blog',
-          time: '2 hours ago',
-          description: 'Latest developments in AI language models...',
-          link: 'https://openai.com'
-        }
-      ]);
+      setLatestNews([]);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -146,11 +106,36 @@ function HomeScreen() {
         </div>
         
         <p className="card-subtitle">Last updated: {stats.lastUpdated}</p>
+        
+        {stats.sourcesList && stats.sourcesList.length > 0 && (
+          <div style={{ marginTop: '1rem' }}>
+            <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
+              <strong>Active Sources:</strong>
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+              {stats.sourcesList.map((source, index) => (
+                <span 
+                  key={index}
+                  style={{
+                    backgroundColor: source.color || '#666',
+                    color: 'white',
+                    padding: '0.25rem 0.5rem',
+                    borderRadius: '12px',
+                    fontSize: '0.8rem',
+                    fontWeight: '500'
+                  }}
+                >
+                  {source.name}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="card">
         <div className="card-header">
-          <h2 className="card-title">🔥 Latest Headlines</h2>
+          <h2 className="card-title">� Latest Headlines</h2>
         </div>
         
         {latestNews.map((article) => (
@@ -175,7 +160,7 @@ function HomeScreen() {
 
       <div className="card">
         <div className="card-header">
-          <h2 className="card-title">🚀 Quick Actions</h2>
+          <h2 className="card-title">�🚀 Quick Actions</h2>
         </div>
         <div className="flex flex-wrap" style={{ gap: '1rem' }}>
           <button 

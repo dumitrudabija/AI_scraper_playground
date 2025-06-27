@@ -5,20 +5,7 @@ function SettingsScreen() {
     theme: 'light',
     notifications: true,
     autoRefresh: true,
-    refreshInterval: '1hour',
-    preferredSources: {
-      'OpenAI Blog': true,
-      'Anthropic Blog': true,
-      'Google AI Blog': true,
-      'ArXiv AI Papers': true,
-      'Hugging Face Blog': true,
-      'GitHub AI Trending': true,
-      'TechCrunch AI': true,
-      'VentureBeat AI': true,
-      'r/MachineLearning': false,
-      'r/LocalLLaMA': false,
-      'Hacker News': true
-    }
+    refreshInterval: '1hour'
   });
 
   const handleSettingChange = (key, value) => {
@@ -28,17 +15,6 @@ function SettingsScreen() {
     }));
   };
 
-  const handleSourceToggle = (source) => {
-    setSettings(prev => ({
-      ...prev,
-      preferredSources: {
-        ...prev.preferredSources,
-        [source]: !prev.preferredSources[source]
-      }
-    }));
-  };
-
-  const enabledSources = Object.values(settings.preferredSources).filter(Boolean).length;
 
   return (
     <div className="screen">
@@ -130,36 +106,11 @@ function SettingsScreen() {
         )}
       </div>
 
-      {/* Source Preferences */}
-      <div className="card">
-        <div className="card-header">
-          <h3 className="card-title">📰 News Sources</h3>
-        </div>
-        <p className="card-subtitle">
-          {enabledSources} of {Object.keys(settings.preferredSources).length} sources enabled
-        </p>
-        
-        <div className="sources-grid">
-          {Object.entries(settings.preferredSources).map(([source, enabled]) => (
-            <div key={source} className="source-item">
-              <label className="source-label">
-                <input
-                  type="checkbox"
-                  checked={enabled}
-                  onChange={() => handleSourceToggle(source)}
-                  className="source-checkbox"
-                />
-                <span className="source-name">{source}</span>
-              </label>
-            </div>
-          ))}
-        </div>
-      </div>
 
       {/* Actions */}
       <div className="card">
         <div className="card-header">
-          <h3 className="card-title">🚀 Actions</h3>
+          <h3 className="card-title">� Actions</h3>
         </div>
         
         <div className="flex flex-column" style={{ gap: '1rem' }}>

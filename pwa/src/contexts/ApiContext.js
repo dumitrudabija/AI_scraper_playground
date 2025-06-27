@@ -17,7 +17,7 @@ export const ApiProvider = ({ children }) => {
   // API base URL - will be localhost during development
   const API_BASE_URL = process.env.NODE_ENV === 'production' 
     ? '/api' 
-    : 'http://localhost:3002/api';
+    : 'http://localhost:3000/api';
 
   const apiCall = useCallback(async (endpoint, options = {}) => {
     setLoading(true);
