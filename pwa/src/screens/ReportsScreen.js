@@ -81,100 +81,145 @@ function ReportsScreen() {
 
   if (loading) {
     return (
-      <div className="space-y-6 animate-fade-in">
-        <div className="card p-8 text-center">
-          <div className="loading-spinner mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Loading latest AI news...</p>
+      <div className="space-y-8 animate-fade-in">
+        <div className="card p-12 text-center">
+          <div className="loading-spinner mx-auto mb-6"></div>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+            Loading latest AI news...
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400">
+            Fetching fresh articles from our sources
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      {/* Summary Card */}
+    <div className="space-y-8 animate-fade-in">
+      {/* Page Header */}
+      <div className="text-center">
+        <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          📊 AI News Reports
+        </h1>
+        <p className="text-lg text-gray-600 dark:text-gray-300">
+          Latest artificial intelligence news and insights from trusted sources
+        </p>
+      </div>
+
+      {/* Summary Cards */}
       {summary && (
-        <div className="card p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
-              📊 Today's Summary
-            </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="card p-6 text-center">
+            <div className="text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">
+              {summary.totalArticles}
+            </div>
+            <div className="text-sm font-medium text-gray-900 dark:text-white mb-1">Articles</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">Fresh content</div>
           </div>
           
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-primary-600 dark:text-primary-400">
-                {summary.totalArticles}
-              </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">Articles</div>
+          <div className="card p-6 text-center">
+            <div className="text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">
+              {summary.sourcesCount}
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-primary-600 dark:text-primary-400">
-                {summary.sourcesCount}
-              </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">Sources</div>
-            </div>
+            <div className="text-sm font-medium text-gray-900 dark:text-white mb-1">Sources</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">Active feeds</div>
           </div>
           
-          <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
-            Last updated: {new Date(summary.lastUpdated).toLocaleString()}
-          </p>
+          <div className="card p-6 text-center">
+            <div className="text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">
+              ⚡
+            </div>
+            <div className="text-sm font-medium text-gray-900 dark:text-white mb-1">Live</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">Real-time updates</div>
+          </div>
+        </div>
+      )}
+
+      {/* Last Updated Info */}
+      {summary && (
+        <div className="card p-4">
+          <div className="flex items-center justify-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Last updated: {new Date(summary.lastUpdated).toLocaleString()}</span>
+          </div>
         </div>
       )}
 
       {/* Filter Tabs */}
-      <div className="card p-4">
-        <div className="flex flex-wrap gap-2 mb-4">
+      <div className="card p-6">
+        <div className="flex flex-wrap gap-3 mb-6">
           {categories.map((category) => (
             <button
               key={category.key}
-              className={`btn px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+              className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                 filter === category.key
-                  ? 'btn-primary'
-                  : 'btn-secondary'
+                  ? 'bg-primary-600 text-white shadow-lg'
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
               }`}
               onClick={() => setFilter(category.key)}
             >
-              <span className="mr-2">{category.icon}</span>
-              {category.label}
+              <span>{category.icon}</span>
+              <span>{category.label}</span>
             </button>
           ))}
         </div>
         
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          Showing {filteredArticles.length} articles
-          {filter !== 'all' && ` in ${categories.find(c => c.key === filter)?.label}`}
-        </p>
+        <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+          <span>
+            Showing {filteredArticles.length} articles
+            {filter !== 'all' && ` in ${categories.find(c => c.key === filter)?.label}`}
+          </span>
+          <span className="flex items-center space-x-1">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-10 0a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2" />
+            </svg>
+            <span>Click to read full article</span>
+          </span>
+        </div>
       </div>
 
-      {/* Articles */}
-      <div className="space-y-4">
+      {/* Articles Grid */}
+      <div className="grid gap-6">
         {filteredArticles.map((article, index) => (
           <div 
             key={article.id} 
-            className="card card-hover p-6 animate-slide-up cursor-pointer"
+            className="card card-hover p-6 animate-slide-up cursor-pointer group"
             style={{ animationDelay: `${index * 0.1}s` }}
             onClick={() => window.open(article.link, '_blank')}
           >
             <div className="flex items-start space-x-4">
               {/* Source Indicator */}
-              <div 
-                className="w-3 h-3 rounded-full mt-2 flex-shrink-0"
-                style={{ backgroundColor: article.sourceColor }}
-              ></div>
+              <div className="flex-shrink-0 pt-1">
+                <div 
+                  className="w-4 h-4 rounded-full"
+                  style={{ backgroundColor: article.sourceColor }}
+                ></div>
+              </div>
               
               {/* Content */}
               <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                    {article.source}
-                  </span>
-                  <span className="text-xs text-gray-500 dark:text-gray-500">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center space-x-3">
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                      {article.source}
+                    </span>
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                      article.category === 'business' 
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
+                        : 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400'
+                    }`}>
+                      {article.category === 'business' ? '💼' : '⚡'} {article.category}
+                    </span>
+                  </div>
+                  <span className="text-xs text-gray-500 dark:text-gray-500 flex-shrink-0">
                     {article.time}
                   </span>
                 </div>
                 
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 line-clamp-2">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200 line-clamp-2">
                   {article.title}
                 </h3>
                 
@@ -182,15 +227,12 @@ function ReportsScreen() {
                   {article.description}
                 </p>
                 
-                {/* Category Badge */}
-                <div className="mt-4">
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                    article.category === 'business' 
-                      ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
-                      : 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400'
-                  }`}>
-                    {article.category === 'business' ? '💼' : '⚡'} {article.category}
-                  </span>
+                {/* Read More Indicator */}
+                <div className="mt-4 flex items-center text-primary-600 dark:text-primary-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <span>Read full article</span>
+                  <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
                 </div>
               </div>
             </div>
@@ -198,14 +240,26 @@ function ReportsScreen() {
         ))}
       </div>
 
+      {/* Empty State */}
       {filteredArticles.length === 0 && (
-        <div className="card p-8 text-center">
-          <div className="text-gray-400 dark:text-gray-500 mb-4">
-            <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="card p-12 text-center">
+          <div className="text-gray-400 dark:text-gray-500 mb-6">
+            <svg className="w-20 h-20 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           </div>
-          <p className="text-gray-500 dark:text-gray-400">No articles found for the selected filter.</p>
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+            No articles found
+          </h3>
+          <p className="text-gray-500 dark:text-gray-400 mb-6">
+            No articles match the selected filter. Try selecting a different category.
+          </p>
+          <button
+            onClick={() => setFilter('all')}
+            className="btn btn-primary px-6 py-2"
+          >
+            Show All Articles
+          </button>
         </div>
       )}
     </div>

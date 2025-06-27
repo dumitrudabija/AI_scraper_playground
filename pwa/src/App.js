@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { ApiProvider } from './contexts/ApiContext';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import Header from './components/Header';
-import Navigation from './components/Navigation';
 import HomeScreen from './screens/HomeScreen';
 import ReportsScreen from './screens/ReportsScreen';
 import SettingsScreen from './screens/SettingsScreen';
@@ -25,13 +24,10 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Header />
-        <main className="pb-20">
-          {renderScreen()}
-        </main>
-        <Navigation />
-      </div>
+      <Header />
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {renderScreen()}
+      </main>
     </div>
   );
 }
