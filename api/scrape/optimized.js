@@ -18,7 +18,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    console.log('Starting optimized scraping process...');
+    console.log('🚀 Starting optimized scraping process with Node.js...');
     
     // Generate fresh data using Node.js instead of Python
     const articles = await scrapeAINews();
@@ -29,12 +29,13 @@ export default async function handler(req, res) {
     
     res.json({
       success: true,
-      message: 'Scraping completed successfully',
-      mode: 'nodejs',
+      message: 'Scraping completed successfully with Node.js RSS parser',
+      mode: 'nodejs-v2',
       timestamp: new Date().toISOString(),
       articles_count: articles.length,
       sources_count: new Set(articles.map(a => a.source)).size,
-      note: 'Fresh data generated and saved'
+      note: 'Fresh data generated and saved using Node.js implementation',
+      deployment_version: '2.0'
     });
     
   } catch (error) {
