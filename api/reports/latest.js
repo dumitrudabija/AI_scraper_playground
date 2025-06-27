@@ -143,6 +143,11 @@ function parseRSSFeed(xmlText, source) {
         continue;
       }
       
+      // Skip articles with no description either
+      if (!description || description.trim() === '') {
+        continue;
+      }
+      
       if (title && link && title.trim() !== '') {
         articles.push({
           source: source.name,
