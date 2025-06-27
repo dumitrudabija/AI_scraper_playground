@@ -5,7 +5,7 @@
 **Live App**: https://ai-scraper-playground.vercel.app/  
 **Last Updated**: June 27, 2025
 
-A real-time AI news aggregation platform featuring a Progressive Web App (PWA) with live RSS scraping from 11 major AI news sources and AI-powered article summaries.
+A real-time AI news aggregation platform featuring a Progressive Web App (PWA) with live RSS scraping from 16 major AI news sources and AI-powered article summaries.
 
 ## 🎯 **Current Features**
 
@@ -18,17 +18,24 @@ A real-time AI news aggregation platform featuring a Progressive Web App (PWA) w
 - **Smart Fallback**: Real URLs even when RSS scraping fails
 
 ### 📊 **Active Data Sources**
-1. **OpenAI Blog** - Latest AI research and announcements
-2. **Anthropic Blog** - AI safety and research updates
-3. **Google AI Blog** - Google's AI research and developments
-4. **ArXiv AI Papers** - Latest academic AI research
-5. **Hugging Face Blog** - Open-source AI and ML updates
-6. **GitHub AI Trending** - Popular AI repositories and projects
-7. **TechCrunch AI** - AI business and industry news
-8. **VentureBeat AI** - AI startup and investment news
-9. **Hacker News** - AI discussions and community insights
-10. **r/MachineLearning** - Reddit ML community updates
-11. **r/LocalLLaMA** - Local AI model discussions
+1. **ArXiv AI Papers** - Latest academic AI research ✅ **WORKING**
+2. **TechCrunch AI** - AI business and industry news ✅ **WORKING**
+3. **MIT Technology Review** - Technology analysis and insights ✅ **WORKING**
+4. **Wired AI** - AI industry insights and analysis ✅ **WORKING**
+5. **Hugging Face Blog** - Open-source AI and ML updates ✅ **WORKING**
+6. **Google AI Blog** - Google's AI research and developments ✅ **WORKING**
+7. **AI News** - Dedicated AI news publication ✅ **WORKING**
+8. **The Gradient** - AI research publication ✅ **CONFIGURED**
+9. **VentureBeat AI** - AI startup and investment news ✅ **CONFIGURED**
+10. **OpenAI Blog** - Latest AI research and announcements ⏳ **CONFIGURED**
+11. **Anthropic Blog** - AI safety and research updates ⏳ **CONFIGURED**
+12. **GitHub AI Trending** - Popular AI repositories and projects ⏳ **CONFIGURED**
+13. **Hacker News** - AI discussions and community insights ⏳ **CONFIGURED**
+14. **r/MachineLearning** - Reddit ML community updates ⏳ **CONFIGURED**
+15. **r/LocalLLaMA** - Local AI model discussions ⏳ **CONFIGURED**
+16. **Additional Sources** - Expandable architecture for more sources
+
+**Current Status**: 6-7 sources actively working, 16 total configured
 
 ## 🚀 **Quick Start**
 
