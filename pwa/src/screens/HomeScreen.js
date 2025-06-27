@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useApi } from '../contexts/ApiContext';
 
 function HomeScreen() {
@@ -13,7 +13,7 @@ function HomeScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setRefreshing(true);
       const reportData = await getLatestReport();
@@ -100,7 +100,7 @@ function HomeScreen() {
       setLoading(false);
       setRefreshing(false);
     }
-  };
+  }, [getLatestReport]);
 
   const handleRefresh = async () => {
     await fetchData();
@@ -114,7 +114,7 @@ function HomeScreen() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   if (loading) {
     return (
