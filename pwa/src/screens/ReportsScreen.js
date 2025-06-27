@@ -123,18 +123,6 @@ function ReportsScreen() {
             
             <h3 className="article-title">{article.title}</h3>
             <p className="article-description">{article.description}</p>
-            
-            <div className="article-actions">
-              <button 
-                className="btn btn-small"
-                onClick={() => window.open(article.link, '_blank')}
-              >
-                📖 Read Full Article
-              </button>
-              <button className="btn btn-small btn-secondary">
-                📤 Share
-              </button>
-            </div>
           </div>
         </div>
       ))}
