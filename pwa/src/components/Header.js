@@ -1,13 +1,25 @@
 import React from 'react';
 import { useTheme } from '../contexts/ThemeContext';
+import { useApi } from '../contexts/ApiContext';
 
 function Header() {
   const { isDarkMode, toggleTheme, currentScreen, setCurrentScreen } = useTheme();
+  const { refreshLatestNews, refreshing, getDataAge } = useApi();
 
   const navItems = [
     { id: 'home', label: 'Home', icon: '🏠' },
     { id: 'reports', label: 'Reports', icon: '📊' }
   ];
+
+  const handleRefresh = async () => {
+    try {
+      await refreshLatestNews();
+    } catch (error) {
+      console.error('Refresh failed:', error);
+    }
+  };
+
+  const dataAge = getDataAge();
 
   return (
     <header className="header">
@@ -44,6 +56,31 @@ function Header() {
 
           {/* Actions */}
           <div className="header-actions">
+            {/* Smart Refresh Button - only show on Reports screen */}
+            {currentScreen === 'reports' && (
+              <button
+                onClick={handleRefresh}
+                disabled={refreshing}
+                className="btn btn-ghost btn-icon"
+                title={`Get latest news${dataAge ? ` (last updated ${dataAge})` : ''}`}
+              >
+                <svg
+                  className={refreshing ? 'animate-spin' : ''}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  style={{ width: '1.25rem', height: '1.25rem' }}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                  />
+                </svg>
+              </button>
+            )}
+
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}

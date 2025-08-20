@@ -2,72 +2,79 @@ import React, { useState, useEffect } from 'react';
 import { useApi } from '../contexts/ApiContext';
 
 function ReportsScreen() {
-  const { getLatestReport } = useApi();
+  const { 
+    getLatestReport, 
+    cachedData, 
+    loading, 
+    isInitialLoad
+  } = useApi();
+  
   const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
   const [summary, setSummary] = useState(null);
 
+  // Process and set articles from cached data or fresh fetch
   useEffect(() => {
-    const fetchArticles = async () => {
-      try {
-        const reportData = await getLatestReport();
-        
-        if (reportData && reportData.data && reportData.data.articles) {
-          const apiArticles = reportData.data.articles.map((article, index) => ({
-            id: index + 1,
-            title: article.title,
-            source: article.source,
-            sourceColor: article.source_color || '#666666',
-            category: article.category || 'development',
-            time: article.pub_date_formatted || article.pub_date || 'Recently',
-            description: article.description || article.content?.substring(0, 200) + '...' || 'No description available',
-            link: article.link
-          }));
-          
-          setArticles(apiArticles);
-          setSummary({
-            totalArticles: reportData.data.total_articles,
-            sourcesCount: reportData.data.sources_count,
-            lastUpdated: reportData.data.generated_at
-          });
-        } else {
-          // Fallback to mock data if API fails
-          setArticles([
-            {
-              id: 1,
-              title: 'OpenAI Announces New GPT Model with Enhanced Capabilities',
-              source: 'OpenAI Blog',
-              sourceColor: '#00A67E',
-              category: 'business',
-              time: '2 hours ago',
-              description: 'OpenAI has unveiled their latest language model featuring improved reasoning, coding abilities, and multimodal understanding.',
-              link: 'https://openai.com/blog/new-gpt-model'
-            }
-          ]);
+    const processData = async () => {
+      let reportData = cachedData;
+      
+      // If no cached data and not loading, try to fetch
+      if (!reportData && !loading && !isInitialLoad) {
+        try {
+          reportData = await getLatestReport();
+        } catch (err) {
+          console.error('Failed to fetch articles:', err);
         }
-      } catch (err) {
-        console.error('Failed to fetch articles:', err);
-        // Use fallback mock data on error
+      }
+      
+      if (reportData && reportData.data && reportData.data.articles) {
+        const apiArticles = reportData.data.articles.map((article, index) => ({
+          id: `${article.source}-${index}`, // Better unique ID
+          title: article.title,
+          source: article.source,
+          sourceColor: article.source_color || '#666666',
+          category: article.category || 'development',
+          time: article.pub_date_formatted || article.pub_date || 'Recently',
+          description: article.ai_summary || article.description || article.content?.substring(0, 200) + '...' || 'No description available',
+          link: article.link,
+          isNew: reportData.data.new_articles_count && index < reportData.data.new_articles_count
+        }));
+        
+        setArticles(apiArticles);
+        setSummary({
+          totalArticles: reportData.data.total_articles,
+          sourcesCount: reportData.data.sources_count,
+          lastUpdated: reportData.data.generated_at,
+          newArticlesCount: reportData.data.new_articles_count || 0,
+          aiEnhanced: reportData.data.ai_enhanced || 0
+        });
+      } else if (!loading && !isInitialLoad) {
+        // Fallback to mock data only if we're not loading and not initial load
         setArticles([
           {
-            id: 1,
+            id: 'fallback-1',
             title: 'OpenAI Announces New GPT Model with Enhanced Capabilities',
             source: 'OpenAI Blog',
             sourceColor: '#00A67E',
             category: 'business',
             time: '2 hours ago',
             description: 'OpenAI has unveiled their latest language model featuring improved reasoning, coding abilities, and multimodal understanding.',
-            link: 'https://openai.com/blog/new-gpt-model'
+            link: 'https://openai.com/blog/new-gpt-model',
+            isNew: false
           }
         ]);
-      } finally {
-        setLoading(false);
+        setSummary({
+          totalArticles: 1,
+          sourcesCount: 1,
+          lastUpdated: new Date().toISOString(),
+          newArticlesCount: 0,
+          aiEnhanced: 0
+        });
       }
     };
 
-    fetchArticles();
-  }, [getLatestReport]);
+    processData();
+  }, [cachedData, loading, isInitialLoad, getLatestReport]);
 
   const filteredArticles = articles.filter(article => 
     filter === 'all' || article.category === filter
