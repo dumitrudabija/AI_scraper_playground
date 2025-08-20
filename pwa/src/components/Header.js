@@ -2,7 +2,7 @@ import React from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 
 function Header() {
-  const { isDarkMode, toggleTheme, refreshData, isRefreshing, currentScreen, setCurrentScreen } = useTheme();
+  const { isDarkMode, toggleTheme, currentScreen, setCurrentScreen } = useTheme();
 
   const navItems = [
     { id: 'home', label: 'Home', icon: '🏠' },
@@ -14,13 +14,17 @@ function Header() {
       <div className="container">
         <div className="header-content">
           {/* Logo and Title */}
-          <div className="header-brand">
-            <div className="header-logo">
-              <span>🤖</span>
+          <div className="logo">
+            <div className="logo-icon">
+              🤖
             </div>
             <div>
-              <h1 className="header-title">AI News</h1>
-              <p className="header-subtitle">Latest AI insights</p>
+              <div style={{ fontSize: 'var(--font-size-xl)', fontWeight: '700', color: 'var(--color-text-primary)' }}>
+                AI News
+              </div>
+              <div style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)' }}>
+                Latest AI insights
+              </div>
             </div>
           </div>
 
@@ -38,45 +42,8 @@ function Header() {
             ))}
           </nav>
 
-          {/* Mobile Navigation */}
-          <nav className="nav nav-mobile">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => setCurrentScreen(item.id)}
-                className={`nav-item ${currentScreen === item.id ? 'active' : ''}`}
-                title={item.label}
-              >
-                {item.icon}
-              </button>
-            ))}
-          </nav>
-
           {/* Actions */}
           <div className="header-actions">
-            {/* Refresh Button */}
-            <button
-              onClick={refreshData}
-              disabled={isRefreshing}
-              className="btn btn-ghost btn-icon"
-              title="Refresh data"
-            >
-              <svg
-                className={`w-5 h-5 ${isRefreshing ? 'animate-spin' : ''}`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                style={{ width: '1.25rem', height: '1.25rem' }}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                />
-              </svg>
-            </button>
-
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}

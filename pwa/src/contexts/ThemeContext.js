@@ -5,7 +5,6 @@ const ThemeContext = createContext();
 export function ThemeProvider({ children }) {
   const [isDarkMode, setIsDarkMode] = useState(true); // Default to dark mode
   const [currentScreen, setCurrentScreen] = useState('home');
-  const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
     // Check for saved theme preference, default to dark
@@ -24,9 +23,9 @@ export function ThemeProvider({ children }) {
 
   const updateDocumentTheme = (isDark) => {
     if (isDark) {
-      document.documentElement.classList.add('dark');
+      document.documentElement.setAttribute('data-theme', 'dark');
     } else {
-      document.documentElement.classList.remove('dark');
+      document.documentElement.removeAttribute('data-theme');
     }
   };
 
@@ -37,27 +36,11 @@ export function ThemeProvider({ children }) {
     localStorage.setItem('theme', newTheme ? 'dark' : 'light');
   };
 
-  const refreshData = async () => {
-    if (isRefreshing) return;
-    
-    setIsRefreshing(true);
-    try {
-      // Simple refresh without API dependency
-      window.location.reload();
-    } catch (error) {
-      console.error('Failed to refresh data:', error);
-    } finally {
-      setIsRefreshing(false);
-    }
-  };
-
   const value = {
     isDarkMode,
     toggleTheme,
     currentScreen,
-    setCurrentScreen,
-    refreshData,
-    isRefreshing
+    setCurrentScreen
   };
 
   return (

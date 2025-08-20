@@ -737,6 +737,25 @@ body {
   animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Navigation Responsive Rules */
+.nav-desktop {
+  display: none;
+}
+
+.nav-mobile {
+  display: flex;
+}
+
+@media (min-width: 768px) {
+  .nav-desktop {
+    display: flex;
+  }
+  
+  .nav-mobile {
+    display: none;
+  }
+}
+
 /* Responsive Design */
 @media (max-width: 767px) {
   .nav {
