@@ -190,7 +190,14 @@ ai-news-scraper/
 - **Graceful Degradation**: App continues with partial data
 - **AI Fallback**: Original descriptions if AI enhancement fails
 
-### **Recent Updates (June 27, 2025)**
+### **Recent Updates (August 20, 2025)**
+- **🔧 Fixed Header Navigation**: Removed duplicate Home/Reports buttons
+- **🗑️ Removed Redundant Refresh**: Eliminated non-functional refresh button
+- **📱 Enhanced Responsive Design**: Added proper desktop/mobile navigation rules
+- **🎨 Improved Header Branding**: Better logo styling and layout
+- **⚡ Code Cleanup**: Simplified ThemeContext and removed unused functionality
+
+### **Previous Updates (June 27, 2025)**
 - **🎨 Modern Design System**: Replaced Tailwind with clean custom CSS
 - **🔧 Fixed Context Issues**: Resolved React provider order problems
 - **📱 Responsive Layout**: Mobile-first design with desktop enhancements
